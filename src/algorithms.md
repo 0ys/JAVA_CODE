@@ -78,14 +78,30 @@
 시간 복잡도는 O(V+E)로 V는 노드의 개수, E는 엣지의 개수를 의미한다.
 DFS는 재귀함수 또는 스택 자료구조로 구현한다. 즉 DFS는 재귀 함수 그 자체로 생각할 수 있다.
 
-* 응용 문제
+#### 응용 문제
 - 백트래킹
 - 단절선 찾기
 - 단절점 찾기
 - 위상 정렬
 - 사이클 찾기
 
+```java
+public class Main {
+   static ArrayList<Integer>[] adj; // 그래프 인접리스트
+   static boolean[] visited;
+   
+   static void DFS(int v){
+      if(visited[v]) return;
+      visited[v] = true;
 
+      for(int i : adj[v]){
+         if(!visited[i]){
+            DFS(i);
+         }
+      }
+   }
+}
+```
 
 ## 너비 우선 탐색 BFS
 간선의 가중치가 모두 동일할 때, BFS로 탐색함
