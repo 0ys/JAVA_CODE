@@ -77,12 +77,11 @@
 깊이 우선 탐색은 그래프의 시작 노드부터 시작하여 탐색 분기의 최대 깊이까지 탐색을 마친 후 다른 쪽 분기로 이동하여 다시 탐색을 수행한다.
 시간 복잡도는 O(V+E)로 V는 노드의 개수, E는 엣지의 개수를 의미한다.
 DFS는 재귀함수 또는 스택 자료구조로 구현한다. 즉 DFS는 재귀 함수 그 자체로 생각할 수 있다.
-
 #### 응용 문제
 - 백트래킹
+- 위상 정렬
 - 단절선 찾기
 - 단절점 찾기
-- 위상 정렬
 - 사이클 찾기
 
 ```java
@@ -103,11 +102,38 @@ public class Main {
 }
 ```
 
-## 너비 우선 탐색 BFS
-간선의 가중치가 모두 동일할 때, BFS로 탐색함
-ArrayDeque를 사용.
+## 너비 우선 탐색 BFS O(V+E)
+그래프 간선의 가중치가 모두 동일할 때, BFS로 탐색한다.
+너비 우선 탐색은 시작 노드를 기준으로 가까운 노드를 먼저 방문하면서 탐색하는 알고리즘이다.
+선입선출 방식으로 탐색하므로 큐를 이용해 구현하는데, 주로 ArrayDeque를 사용한다. 
+또한 BFS는 탐색 시작 노드와 가까운 노드를 우선하여 탐색하므로 목표 노드에 도착하는 경로가 여러 개일 때, 최단 경로를 보장한다. 
+시간 복잡도는 O(V+E)로 DFS와 같다.
+#### 응용 문제
 - 최단 경로 찾기
 - 위상 정렬
+
+```java
+public class Main {
+   static ArrayList<Integer>[] adj; // 그래프 인접리스트
+   static boolean[] visited;
+   
+   static void BFS(int v){
+      Queue<Integer> queue = new ArrayDeque<>();
+      queue.add(v);
+      visited[v] = true;
+
+      while(!queue.isEmpty()){
+         int now = queue.poll();
+         for(int i : adj[now]){
+            if(!visited[i]){
+               visited[i] = true;
+               queue.add(i);
+            }
+         }
+      }
+   }
+}
+```
 
 
 ---
