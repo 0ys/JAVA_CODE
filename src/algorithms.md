@@ -135,6 +135,34 @@ public class Main {
 }
 ```
 
+## 이진 탐색 O(logN)
+데이터가 정렬돼 있는 상태에서 대상 데이터의 중앙값과 찾고자 하는 값을 비교해
+데이터의 크기를 절반씩 줄이면서 대상을 찾는다.
+이진 탐색을 사용하면 N개의 데이터에서 logN 번의 연산으로 원하는 데이터의 위치를 찾을 수 있다.
+다만 이진 탐색은 데이터가 정렬되어 있어야 한다.
+```java
+public class Main {
+   static boolean binarySearch(int target){
+      boolean find = false;
+      int start = 0;
+      int end = A.length-1; // 배열의 마지막 인덱스
+      while(start<=end){
+         int mid = (start+end)/2;
+         int value = A[mid];
+         if(value==target){
+            find = true;
+            break;
+         } else if(value>target){
+            end = mid-1;
+         } else {
+            start = mid+1;
+         }
+      }
+      return find;
+   }
+}
+```
+
 
 ---
 ## 인덱스 트리 O(MlogN)
