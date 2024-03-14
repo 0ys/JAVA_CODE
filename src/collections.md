@@ -198,3 +198,20 @@ public class Main {
 ```java
 ArrayDeque<A> deque = new ArrayDeque<>();
 ```
+
+## Arrays.sort
+```java
+public class Main {
+    public static void main(String[] args) {
+        Arrays.sort(A, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                if(o1[1] == o2[1]){
+                    return o1[0] - o2[0];
+                }
+                return o1[1] - o2[1];
+            }
+        });
+    }
+}
+```
