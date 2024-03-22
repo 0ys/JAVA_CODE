@@ -257,25 +257,71 @@ public class Main {
 2개의 자연수 a, b에 대해 a를 b로 나눈 나머지를 r이라 하면 (단, a > b), 
 a와 b의 최대공약수는 b와 r의 최대공약수와 같다는 성질을 이용한다.\
 즉, `gcd(a, b) = gcd(b, a%b) (단, a>=b)`이다.
-
+1. 큰 수를 작은 수로 나누는 MOD 연산을 수행한다.
+2. 앞 단계에서의 작은 수와 MOD 연산 결괏값(나머지)으로 다시 MOD 연산을 수행한다. (재귀)
+3. 나머지가 0이 되는 순간의 작은 수를 최대 공약수로 선택한다.
 ```java
 static int gcd(int a, int b){
     if(b==0) return a; // 나머지가 0이 되는 순간의 작은 수를 최대 공약수로 선택함
     return gcd(b, a%b); // 앞 단계의 작은 수(b)와 큰 수에서 작은 수 MOD 연산(a%b)로 다시 MOD 연산 수행
 }
 ```
+#### 최소 공배수: `A*B/gcd(A, B)`
 #### 세 개 이상의 정수의 최대 공약수를 구하는 방법
 유클리드 호제법을 재귀적으로 사용한다. 
 `gcd(A, B, C) = gcd(gcd(A, B), C)`를 이용한다.
 
 
-### 확장 유클리드 호제법 (베주 항등식 Bezout's identity)
+## 확장 유클리드 호제법 (베주 항등식 Bezout's identity)
 유클리드 호제법이 최대 공약수를 구하는 것이라면, 확장 유클리드 호제법은 방정식의 해 x, y를 구한다.
 - 해를 구하고자 하는 방정식 : `ax + by = c (a, b, c, x, y, 는 정수)`
 
 위 방정식은 `c % gcd(a,b) = 0`인 경우에만 정수해를 가진다. 만약 c가 gcd(a,b)의 배수가 아니라면 해당 방정식을 만족하는 x, y값은 정수 범위에서 존재하지 않는다.\
 다시 말해 ax + by = c가 정수해를 갖게 하는 c의 최솟값이 gcd(a,b)라는 것을 의미한다. 이 때 x, y 중 한개는 보통 음수가 된다.\
-특히 a, b가 서로소(gcd(a,b)=1)인 경우 유용하다. 이 경우, ax + by = 1이 되고, 여기서 x는 MOD 연산의 곱의 역원이 되기 때문이다.
+특히 a, b가 서로소(gcd(a,b)=1)인 경우 유용하다. 이 경우, ax + by = 1이 되고, 여기서 x는 MOD 연산의 곱의 역원이 되기 때문이다. 
+#### 5x+9y=2일 때 이 식을 만족하는 정수 x, y를 구해보자.
+1. 해당 식이 정수해를 갖게 하는 c의 최솟값이 gcd(5,9)=1이므로 5x+9y=1로 식을 놓고 mok=2를 저장한다.
+2. a, b로 유클리드 호제법을 반복하면서 몫, 나머지를 저장한다. 나머지가 0이 되면 반복을 중단한다.
+3. 반복으로 구한 나머지와 몫을 이용하여 거꾸로 올라가며 x=y', y=x'-y'*q를 계산한다.
+이때 x'는 이전 x, y'는 이전 y를 의미하고, q는 현재 보고 있는 몫을 의미한다.
+4. 이렇게 재귀 방식으로 알아낸 최종 x, y는 ax+by=gcd(a,b)를 만족하므로 mok를 곱해서 최종 Kx, Ky를 간단히 구할 수 있다.
+```java
+public class Main_21568_AxByC {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int A = sc.nextInt();
+        int B = sc.nextInt();
+        int C = sc.nextInt();
+
+        int gcd = gcd(A, B);
+        if(C % gcd != 0) System.out.println(-1);
+        else {
+            int mok = C /gcd;
+            long[] ret = Excute(A, B);
+            System.out.println(ret[0]*mok + " " + ret[1]*mok);
+        }
+    }
+
+    public static long[] Excute(long a, long b){ // 유클리드 호제법
+        long[] ret = new long[2];
+        if(b==0) {
+            ret[0] = 1; ret[1] = 0; // x=1, y=0으로 설정하고 리턴하기
+            return ret;
+        }
+
+        long q = a/b;
+        long[] v = Excute(b, a%b); // 재귀 형태로 유클리드 호제법 수행
+        ret[0] = v[1]; // 역순으로 올라오면서 x, y값을 계산하는 로직
+        ret[1] = v[0]-v[1]*q;
+        return ret;
+    }
+
+    public static int gcd(int a, int b){
+        if(b == 0) return a;
+        return gcd(b, a%b);
+    }
+}
+```
 
 ---
 ## 인덱스 트리 O(MlogN)
