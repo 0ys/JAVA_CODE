@@ -225,7 +225,31 @@ public class Main {
 1. 구하고자 하는 오일러 피의 범위만큼 배열을 자기 자신의 인덱스값으로 초기화한다.
 2. 2부터 시작해 현재 배열의 값과 인덱스가 같으면(=소수일 때) 현재 선택된 숫자(K)의 배수에 해당하는 수를
    끝까지 탐색하며 `P[i] = P[i] - P[i]/K` 연산을 수행한다. (i는 K의 배수)
+```java
+public class Main {
+   public static void main(String[] args) {
+      Scanner sc = new Scanner(System.in);
+      int N = sc.nextInt();
 
+      int[] P = new int[N+1];
+      for(int i=0; i<=N; i++){
+         P[i] = i;
+      }
+
+      for(int K=2; K<=N; K++){
+         if(P[K] == K){
+            for(int i=K; i<=N; i += K){
+               P[i] = P[i] - P[i]/K;
+            }
+         }
+      }
+
+      for(int p : P){
+         System.out.print(p+" ");
+      }
+   }
+}
+```
 
 
 ## 유클리드 호제법
