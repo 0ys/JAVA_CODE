@@ -199,19 +199,27 @@ public class Main {
 ArrayDeque<A> deque = new ArrayDeque<>();
 ```
 
-## Arrays.sort
+## Sort
+
 ```java
+import java.util.ArrayList;
+import java.util.Collections;
+
 public class Main {
     public static void main(String[] args) {
+        int[] A = new int[N];
         Arrays.sort(A, new Comparator<int[]>() {
             @Override
             public int compare(int[] o1, int[] o2) {
-                if(o1[1] == o2[1]){
+                if (o1[1] == o2[1]) {
                     return o1[0] - o2[0];
                 }
                 return o1[1] - o2[1];
             }
         });
+
+        ArrayList<Integer> A = new ArrayList<>();
+        Collections.sort(A);
     }
 }
 ```
