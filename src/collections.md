@@ -164,14 +164,14 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        // 기본 선언
+        // 1. 기본 선언
         PriorityQueue<Integer> minHeap = new PriorityQueue<>(); // 오름차순
         PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder()); // 내림차순
 
-        // Comparable 를 활용한 우선순위 설정
+        // 2. Comparable 를 활용한 우선순위 설정
         PriorityQueue<Node> que = new PriorityQueue<>();
 
-        // 새로운 우선순위 설정 : 절댓값에 따라 순위결정하기
+        // 3. 새로운 우선순위 설정 : 절댓값에 따라 순위결정하기
         PriorityQueue<Integer> pq = new PriorityQueue<>((o1, o2) -> {
             int first_abs = Math.abs(o1);
             int second_abs = Math.abs(o2);
@@ -179,7 +179,7 @@ public class Main {
             else return first_abs - second_abs;
         });
         
-        // Comparator 클래스를 활용한 우선순위 설정
+        // 4. Comparator 클래스를 활용한 우선순위 설정
         PriorityQueue<Jewel> pq = new PriorityQueue<>(new Comparator<Jewel>(){
            @Override
            public int compare(Jewel o1, Jewel o2) {
@@ -207,6 +207,7 @@ import java.util.Collections;
 
 public class Main {
     public static void main(String[] args) {
+        // 1. 기본 Arrays Sort
         int[] A = new int[N];
         Arrays.sort(A, new Comparator<int[]>() {
             @Override
@@ -217,7 +218,8 @@ public class Main {
                 return o1[1] - o2[1];
             }
         });
-
+        
+        // 2. Collections Sort
         ArrayList<Integer> A = new ArrayList<>();
         Collections.sort(A);
     }
