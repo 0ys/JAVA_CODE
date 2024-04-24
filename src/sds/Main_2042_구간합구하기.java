@@ -48,55 +48,6 @@ public class Main_2042_구간합구하기 {
         br.close();
     }
 
-    static long query(int left, int right){
-        // left, right 포인터를 tree배열에서 찾을 수 있는 leafNode의 인덱스로 바꿔준다.
-        left += leafPointer - 1;
-        right += leafPointer - 1;
-        long result = 0L;
-
-        // left, right 포인터가 교차될 때까지
-        while(left <= right){
-            // left 포인터가 right child면 현재 값을 result에 더하고 left포인터를 오른쪽으로 하나 당긴다.
-            if(left % 2 == 1){
-                result += tree[left];
-                left++;
-            }
-            // right 포인터가 left child면 현재 값을 result에 더하고 right포인터를 왼쪽으로 하나 당긴다.
-            if(right % 2 == 0){
-                result += tree[right];
-                right--;
-            }
-            // 부모로 이동
-            left /= 2;
-            right /= 2;
-        }
-
-        return result;
-    }
-
-    //3. 조건에 따라 리프노드의 부모노드를 따라 루트노드까지 값을 업데이트 한다.
-    // 구간합일 경우, 부모 = left child + right child
-    // min/max heap일 경우, 부모 = min/max(left child, right child)
-    // ex) tree[i] = tree[i*2] + tree[i*2+1]
-    static void update(int index, long value){
-        //index로 들어온 값을 tree배열에서 찾을 수 있는 leafNode의 인덱스로 바꿔준다.
-        int treeIndex = leafPointer + index - 1 ;
-
-        //리프노드의 값을 바꾸고
-        tree[treeIndex] = value;
-        //부모노드로 간다
-        treeIndex /= 2;
-
-        //부모노드->루트노드까지 값 update
-        //구간합일 경우, 부모 = left child + right child
-        //min/max heap일 경우, 부모 = min/max(left child, right child)
-        while(treeIndex > 0){
-            // tree 올라가면서 sum 으로 채우기
-            tree[treeIndex] = tree[treeIndex*2] + tree[(treeIndex*2)+1];
-            treeIndex /= 2;
-        }
-    }
-
     static void initTree(){
         int leafCount = 1;
 
@@ -126,4 +77,51 @@ public class Main_2042_구간합구하기 {
             tree[i] = tree[i*2] + tree[(i*2)+1];
         }
     }
+
+    static long query(int left, int right){
+        // left, right 포인터를 tree배열에서 찾을 수 있는 leafNode의 인덱스로 바꿔준다.
+        left += leafPointer - 1;
+        right += leafPointer - 1;
+        long result = 0L;
+
+        // left, right 포인터가 교차될 때까지
+        while(left <= right){
+            // left 포인터가 right child면 현재 값을 result에 더하고 left포인터를 오른쪽으로 하나 당긴다.
+            if(left % 2 == 1){
+                result += tree[left];
+                left++;
+            }
+            // right 포인터가 left child면 현재 값을 result에 더하고 right포인터를 왼쪽으로 하나 당긴다.
+            if(right % 2 == 0){
+                result += tree[right];
+                right--;
+            }
+            // 부모로 이동
+            left /= 2;
+            right /= 2;
+        }
+
+        return result;
+    }
+
+    static void update(int index, long value){
+        //index로 들어온 값을 tree배열에서 찾을 수 있는 leafNode의 인덱스로 바꿔준다.
+        int treeIndex = leafPointer + index - 1 ;
+
+        //리프노드의 값을 바꾸고
+        tree[treeIndex] = value;
+        //부모노드로 간다
+        treeIndex /= 2;
+
+        //부모노드->루트노드까지 값 update
+        //구간합일 경우, 부모 = left child + right child
+        //min/max heap일 경우, 부모 = min/max(left child, right child)
+        while(treeIndex > 0){
+            // tree 올라가면서 sum 으로 채우기
+            tree[treeIndex] = tree[treeIndex*2] + tree[(treeIndex*2)+1];
+            treeIndex /= 2;
+        }
+    }
+
+
 }

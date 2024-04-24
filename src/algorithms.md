@@ -891,24 +891,167 @@ public class Main {
 
 ---
 # 트리
+## 코딩 테스트에서 트리 문제 유형
+1. 그래프로 푸는 트리
+   1. 노드와 에지를 그래프처럼 인접 리스트로 표현할 수 있음
+   2. 그래서 DFS와 BFS를 적용하여 트리 문제를 해결할 수 있음
+2. 트리만을 위한 문제
+   1. 이진 트리, 세그먼트 트리, LCA 처럼 1차원 배열로 트리를 표현할 수 있음
+   2. 즉, 드라마틱하게 데이터를 관리함
+
 ## 이진 트리
+1차원 배열로 표현할 수 있는 트리의 기본 구조이다.
+이진 트리는 각 노드의 자식 노드(차수)의 개수가 2 이하로 구성돼 있는 트리를 말한다.
+
+- 편향 이진 트리: 노드들이 한쪽으로 편향돼 생성된 이진 트리, 탐색 속도가 저하되고 공간 낭비가 심함
+- 포화 이진 트리: 트리의 높이가 모두 일정하며, 리프 노드가 꽉찬 이진 트리
+- 완전 이진 트리: 마지막 레벨을 제외하고 완전하게 노드들이 채워져 있고, 마지막 레벨은 왼쪽부터 채워짐
+
+보통 배열에 데이터를 담을 때는 완전 이진 트리 형태를 떠올리면 된다.
+### 트리의 노드와 배열의 인덱스 사이 상관 관계
+| 이동 목표 노드  | 인덱스 연산                | 제약 조건(N=노드 개수)     |
+| --------- | --------------------- | ------------------ |
+| 루트 노드     | index = 1             |                    |
+| 부모 노드     | index = index / 2     | 현재 노드가 루트 노드가 아님   |
+| 왼쪽 자식 노드  | index = index * 2     | index * 2 <= N     |
+| 오른쪽 자식 노드 | index = index * 2 + 1 | index * 2 + 1 <= N |
+
 
 
 ## 인덱스 트리 O(MlogN)
-2042 구간 합 구하기 참고
-1. 구간 left, right가 주어졌을 때, A[left] + A[left+1] + ... + A[r-1] + A[r]
-2. i번째 수 A[i]를 V로 바꾸어라 = update
+주어진 데이터들의 구간 합과 데이터 업데이트를 빠르게 수행하기 위해 고안해낸 자료구조이다.
+보통 구간 합은 '합 배열'을 이용하여 구할 수 있는데, 인덱스 트리와의 차이점은 데이터의 업데이트가 어렵다는 것이다.
+인덱스 트리는 특유의 자료구조를 가지고 데이터의 업데이트를 손쉽게 수행하며 구간의 질의값을 구할 수 있다.
 
-트리를 저장하는 1차원 배열은 2^n * 2 크기로 선언한다.\
-왜냐하면 리프 노트의 개수가 N개 이상이 되도록 높이 T인 트리 배열을 만들어야 함\
-배열의 0번째는 사용하지 않는다.\
-그래서 리프 노드가 8개라면 arr[16]으로 선언하고 0번째 배열을 제외한 15개의 노드를 사용함\
-리프 포인터를 설정해서 리프 노드를 저장하고 업데이트할 때 사용함
+- 구간 합, 구간 곱
+- 최대, 최소 구하기
 
-parent index = current index/2
+### 1. 트리 초기화하기
+1. 리프 노드의 개수가 N개 이상이 되도록 높이 T인 트리 배열을 만든다.
+   1. `2^K >= N`을 만족하는 k의 최솟값을 구한 후 `2^K * 2`를 배열의 크기로 정의한다.
+   2. 배열의 0번째는 사용하지 않는다.
+   3. 예를 들어, 리프 노드가 5개라면 arr[16]으로 선언하고 0번째 배열을 제외한 15개의 노드를 사용한다.
+2. 인덱스 트리의 리프노드에 원본 데이터를 저장한다.
+   1. 2^K를 시작 인덱스로 해서 차례로 원본 데이터를 저장한다.
+3. 인덱스 2^K를 리프 포인터를 설정해서 리프 노드의 위치를 저장하고 업데이트에 사용한다.
+4. 리프 노드를 제외한 나머지 노드의 값을 채운다.
+   1. 2^K-1부터 1번 쪽으로 채우게 된다.
+   2. 채워야 하는 인덱스가 N이라고 가정하면 자신의 자식 노드를 이용해 해당 값을 채울 수 있다.
+   3. 자식 노드의 인덱스는 이진 트리 형식이기 때문에 2N, 2N+1이 된다.
+   4. 구간 합 예 : `A[N] = A[2N] + A[2N+1]`
+   5. 최대 예 : `A[N] = Math.max(A[2N], A[2N+1])`
+
+### 2. 질의값 구하기 (구간합 또는 최대, 최소)
+1. 주어진 질의 인덱스를 인덱스 트리의 리프 노드에 해당하는 인덱스로 변경한다.
+   1. `인덱스 트리 index = 주어진 질의 index + 2^K - 1`
+2. 질의에 해당하는 노드를 선택한다.
+   1. left % 2 == 1일 때 해당 노드를 선택한다. // 완전 이진 트리에서 left child는 항상 짝수임
+   2. right % 2 == 0일 때 해당 노드를 선택한다. // 완전 이진 트리에서 right child는 항상 홀수임
+   3. left의 depth를 변경한다. -> left = (left + 1) / 2 연산을 실행
+   4. right의 depth를 변경한다. -> right = (right - 1) / 2 연산을 실행
+   5. right < left 될 때까지 과정 1~4를 반복한다.
+3. 선택된 노드를 가지고 질의값을 구한다.
+   1. 구간 합 : 선택된 노드를 모두 더함
+   2. 최댓값 : 선택된 노드들 중 MAX 값을 선택해 출력
+
+### 3. 데이터 업데이트하기
+1. 주어진 질의 인덱스를 인덱스 트리의 리프 노드에 해당하는 인덱스로 변경한다.
+   1. `인덱스 트리 index = 주어진 질의 index + 2^K - 1`
+2. 인덱스에 해당하는 배열의 값을 변경한다.
+3. 자신의 부모 노드로 이동하면서 주어진 조건에 맞는 값으로 업데이트한다.
 
 
-## 최소 공통 조상(LCA)
+```java
+public class Main {
+    static int N, M, K;
+    static long[] input, tree;
+    static int leafPointer;
+    public static void main(String[] args) {
+        input = new long[N];
+        for(int i=0; i<N; i++) {
+            input[i]= Long.parseLong(br.readLine());
+        }
+
+        // tree 초기화
+        initTree();
+        query(2, 7);
+        update(3, 5);
+    }
+    
+    static void initTree(){
+        // 1. input 데이터가 N개인 경우, 리프노드의 수 구하기
+        // N <= 2^K 를 만족하는 최소값 K을 구한다.
+        // ex) N = 9일 경우, 2^K = leafCount = 16
+        int leafCount = 1;
+        while(N > leafCount){
+            leafCount *= 2;
+            // leafCount <<= 1;
+        }
+   
+        // 2. 리프노드의 사이즈를 바탕으로 전체 인덱스 트리의 크기를 구한다.
+        // 전체 인덱스 트리의 크기 = 2^K * 2
+        tree = new long[leafCount * 2];
+        leafPointer = leafCount;
+    
+        // 3. 원본 데이터를 리프 노드에 저장한다.
+        for(int i=0; i<N; i++){
+            tree[leafPointer + i] = input[i];
+        }
+   
+        // 4. 조건에 따라 리프노드를 제외한 나머지 노드의 값을 채운다.
+        // 2^K-1 부터 1번 쪽으로 차례로 채움
+        for(int i=leafPointer-1; i>0; i--){
+            // tree 올라가면서 구간 합으로 채우기
+            tree[i] = tree[i*2] + tree[(i*2)+1];
+        }
+    }
+
+    static long query(int left, int right){
+        // left, right 포인터를 인덱스 트리의 leafNode에 해당하는 인덱스로 바꿔준다.
+        // 인덱스 트리 index = 주어진 질의 index + 2^K - 1
+        left += leafPointer - 1;
+        right += leafPointer - 1;
+        
+        long result = 0L;
+        // left, right 포인터가 교차될 때까지
+        while(left <= right){
+            // left 포인터가 right child면 현재 값을 result에 더하고 left포인터를 오른쪽으로 하나 당긴다.
+            if(left % 2 == 1){
+                result += tree[left];
+                left++;
+            }
+            // right 포인터가 left child면 현재 값을 result에 더하고 right포인터를 왼쪽으로 하나 당긴다.
+            if(right % 2 == 0){
+                result += tree[right];
+                right--;
+            }
+            // 부모로 이동
+            left /= 2;
+            right /= 2;
+        }
+
+        return result;
+    }
+
+    static void update(int index, long value){
+        // index로 들어온 값을 tree 배열에서 찾을 수 있는 leafNode 인덱스로 바꿔준다.
+        int treeIndex = leafPointer + index - 1 ;
+
+        // 리프노드의 값을 바꾸고
+        tree[treeIndex] = value;
+        // 부모노드로 간다
+        treeIndex /= 2;
+
+        // 부모노드->루트노드까지 값을 update 한다.
+        while(treeIndex > 0){
+            tree[treeIndex] = tree[treeIndex*2] + tree[(treeIndex*2)+1];
+            treeIndex /= 2;
+        }
+    }
+}
+```
+
+## 최소 공통 조상 (LCA; Lowest Common Ancestor)
 
 
 ---
