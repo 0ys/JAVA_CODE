@@ -1,37 +1,40 @@
-- [정렬](#--)
-- [탐색](#--)
-   * [합 배열](#----)
-   * [2 Pointers O(N)](#2-pointers-o-n-)
-   * [슬라이딩 윈도우 O(N)](#---------o-n-)
-   * [Lower & Upper Bound O(logN)](#lower---upper-bound-o-logn-)
-   * [깊이 우선 탐색 DFS O(V+E)](#---------dfs-o-v-e-)
-   * [너비 우선 탐색 BFS O(V+E)](#---------bfs-o-v-e-)
-   * [이진 탐색 O(logN)](#------o-logn-)
-   * [우선순위 큐 Priority Queue : O(NlogN)](#-------priority-queue---o-nlogn-)
-- [정수론](#---)
-   * [에라토스테네스의 체](#----------)
-   * [팰린드롬 수](#------)
-   * [오일러 피](#-----)
-   * [유클리드 호제법](#--------)
-   * [확장 유클리드 호제법 (베주 항등식 Bezout's identity)](#--------------------bezout-s-identity-)
-- [조합](#--)
-- [그래프](#---)
-   * [그래프의 표현](#-------)
-   * [유니온파인드](#------)
-   * [위상정렬 O(V+E)](#-----o-v-e-)
-   * [다익스트라 O(ElogV)](#------o-elogv-)
-   * [벨만-포드 O(VE)](#------o-ve-)
-   * [플로이드-워셜 O(V^3)](#--------o-v-3-)
-   * [최소 신장 트리 (MST; Minimum Spanning Tree)](#----------mst--minimum-spanning-tree-)
+# 목차
+- [알고리즘](#알고리즘)
+- [자바 형변환](#자바에서의-형변환)
+- [정렬](#정렬)
+   * [라이브러리를 이용한 정렬](#라이브러리를-이용한-정렬)
+   * [병합 정렬](#병합-정렬-분할-정복-divide-and-conquer-onlogn)
+- [탐색](#탐색)
+   * [합 배열](#합-배열)
+   * [2 Pointers O(N)](#2-pointers-on)
+   * [슬라이딩 윈도우 O(N)](#슬라이딩-윈도우-on)
+   * [Lower & Upper Bound O(logN)](#lower--upper-bound-ologn)
+   * [깊이 우선 탐색 DFS O(V+E)](#깊이-우선-탐색-dfs-ove)
+   * [너비 우선 탐색 BFS O(V+E)](#너비-우선-탐색-bfs-ove)
+   * [이진 탐색 O(logN)](#이진-탐색-ologn)
+   * [우선순위 큐 O(NlogN)](#우선순위-큐-priority-queue--onlogn)
+- [정수론](#정수론)
+   * [에라토스테네스의 체](#에라토스테네스의-체)
+   * [팰린드롬 수](#팰린드롬-수)
+   * [오일러 피](#오일러-피)
+   * [유클리드 호제법](#유클리드-호제법)
+   * [확장 유클리드 호제법](#확장-유클리드-호제법-베주-항등식-bezouts-identity)
+- [조합](#조합)
+- [그래프](#그래프)
+   * [그래프의 표현](#그래프의-표현)
+   * [유니온파인드](#유니온파인드)
+   * [위상정렬 O(V+E)](#위상정렬-ove)
+   * [다익스트라 O(ElogV)](#다익스트라-oelogv)
+   * [벨만-포드 O(VE)](#벨만-포드-ove)
+   * [플로이드-워셜 O(V^3)](#플로이드-워셜-ov3)
+   * [최소 신장 트리(MST)](#최소-신장-트리-mst-minimum-spanning-tree)
 - [트리](#--)
-   * [코딩 테스트에서 트리 문제 유형](#-----------------)
-   * [이진 트리](#-----)
-   * [인덱스 트리 O(MlogN)](#-------o-mlogn-)
-   * [최소 공통 조상 (LCA; Lowest Common Ancestor)](#----------lca--lowest-common-ancestor-)
+   * [코딩 테스트에서 트리 문제 유형](#코딩-테스트에서-트리-문제-유형)
+   * [이진 트리](#이진-트리)
+   * [인덱스 트리 O(MlogN)](#인덱스-트리-omlogn)
+   * [최소 공통 조상(LCA)](#최소-공통-조상-lca-lowest-common-ancestor)
 
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
-
-
+---
 # 알고리즘
 ## 알고리즘 정리
 |   구분    | 알고리즘              | 시간복잡도    | 구현 유형         | 사용 기법          |
@@ -95,7 +98,7 @@
 - N<=1,000 : N^2, N^2logN
 - N<=100,000 : N, NlogN, logN, O(1)
 
-## 자바에서의 형변환
+# 자바에서의 형변환
 ```java
 public class Main {
     public static void main(String[] args) {
