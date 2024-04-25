@@ -73,13 +73,11 @@
 - 히든케이스(Edge 검사) : 기본 테스트케이스 외에도 끝 값이나 시작 값으로 검사해보기
 - 모든 테스트 케이스를 통과했는데도 틀린다면, 자료형을 고려!(int를 long으로)
 - 20억이 넘어가면 자료형 long을 사용하자.
-- 
 - 1억 연산은 1초를 의미한다. 즉, 만*만이 넘어가면 틀린거임
 - 자바는 실수를 double을 기본으로 사용한다.
 - int 배열은 1억건 이상 넘어가면 힘들다.
 - `연산 횟수 = 알고리즘 시간 복잡도 * 데이터의 크기`
 - 예를 들어, 시간제한이 2초(2억번 연산)일 때, 데이터가 1,000,000이라면 N*N은 사용할 수 없다.
-- 
 - 100,000 이상의 데이터를 처리할 때 N*N 알고리즘은 어렵다.
 - 1,000,000인 데이터를 처리할 때는 NlogN 알고리즘을 사용
 - 5,000,000인 데이터일 경우, NlogN 알고리즘 사용 불가(단순 정렬은 가능)하므로 O(n) 알고리즘을 사용해야함
@@ -143,7 +141,7 @@ public class Main {
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Main {
+public class Sort {
     public static void main(String[] args) {
         // 1. 기본 Arrays Sort
         int[] A = new int[N];
@@ -171,7 +169,7 @@ public class Main {
 - 투 포인터 개념을 사용하여 왼쪽, 오른쪽 그룹을 병합한다.
 - 왼쪽 포인터와 오른쪽 포인터의 값을 비교하여 작은 값을 결과 배열에 추가하고 포인터를 오른쪽으로 1칸 이동한다.
 ```java
-public class Main {
+public class DivideAndConquer {
     static void mergeSort(int s, int e) {
         if(e-s < 1) return; // 배열 한칸까지 재귀함수로 나누기
         int m = s + (e-s)/2;
@@ -228,7 +226,7 @@ public class Main {
 - 구간 합 구하는 공식 : `D[x2][y2] - D[x1-1][y2] - D[x2][y1-1] + D[x1-1][y1-1]`
 
 ```java
-public class Main {
+public class PrefixSumArray {
     static int N, M;
     public static void main(String[] args) {
         // 1차원 배열 구간 합 구하기
@@ -282,7 +280,7 @@ public class Main {
    8. `A[i] + A[j] == M; i++; j--; count++;`
 
 ```java
-public class Main {
+public class TwoPointers {
     public static void main(String[] args) {
         int[] arr = new int[N];
         for(int i=0; i<N; i++){
@@ -417,7 +415,7 @@ DFS는 재귀함수 또는 스택 자료구조로 구현한다. 즉 DFS는 재�
 - 사이클 찾기
 
 ```java
-public class Main {
+public class DFS {
    static ArrayList<Integer>[] adj; // 그래프 인접리스트
    static boolean[] visited;
    
@@ -445,7 +443,7 @@ public class Main {
 - 위상 정렬
 
 ```java
-public class Main {
+public class BFS {
    static ArrayList<Integer>[] adj; // 그래프 인접리스트
    static boolean[] visited;
    
@@ -565,7 +563,7 @@ public class Main {
 1. 구하고자 하는 소수 범위만큼 1차원 배열을 생성한다.
 2. 소수를 찾으면 해당하는 소수의 배수들을 모두 지워줌으로써 지워지지 않은 숫자를 찾는다.
 ```java
-public class Main_1929_소수구하기 {
+public class Prime {
     public static void main(String[] args) {
         int[] prime = new int[N+1]; // 1차원 배열 생성 후 초기화
         for(int i=2; i<=N; i++){
@@ -592,7 +590,7 @@ public class Main_1929_소수구하기 {
 79,179와 324,423 처럼 어떤 수와 그 수의 숫자 순서를 뒤집은 수가 일치하는 수를 팰린드롬이라고 부른다.
 숫자를 char 배열 형태로 변환한 후 양끝의 투 포인터를 비교하면 쉽게 판별할 수 있다.
 ```java
-public class Main {
+public class Palindrome {
    private static boolean isPalindrome(int target){
       char[] temp = String.valueOf(target).toCharArray();
       int s = 0;
@@ -617,7 +615,7 @@ public class Main {
 2. 2부터 시작해 현재 배열의 값과 인덱스가 같으면(=소수일 때) 현재 선택된 숫자(K)의 배수에 해당하는 수를
    끝까지 탐색하며 `P[i] = P[i] - P[i]/K` 연산을 수행한다. (i는 K의 배수)
 ```java
-public class Main {
+public class EulerPhi {
    public static void main(String[] args) {
       Scanner sc = new Scanner(System.in);
       int N = sc.nextInt();
@@ -670,7 +668,7 @@ static int gcd(int a, int b){
 
 
 ## 확장 유클리드 호제법 (베주 항등식 Bezout's identity)
-유클리드 호제법이 최대 공약수를 구하는 것이라면, 확장 유클리드 호제법은 방정식의 해 x, y를 구한다.
+유클리드 호제법이 최대 공약수를 구하는 것이라면, 확장 유클리드 호제법(Extended Euclidean Algorithm)은 방정식의 해 x, y를 구한다.
 - 해를 구하고자 하는 방정식 : `ax + by = c (a, b, c, x, y, 는 정수)`
 
 위 방정식은 `c % gcd(a,b) = 0`인 경우에만 정수해를 가진다. 만약 c가 gcd(a,b)의 배수가 아니라면 해당 방정식을 만족하는 x, y값은 정수 범위에서 존재하지 않는다.\
@@ -683,7 +681,7 @@ static int gcd(int a, int b){
 이때 x'는 이전 x, y'는 이전 y를 의미하고, q는 현재 보고 있는 몫을 의미한다.
 4. 이렇게 재귀 방식으로 알아낸 최종 x, y는 ax+by=gcd(a,b)를 만족하므로 mok를 곱해서 최종 Kx, Ky를 간단히 구할 수 있다.
 ```java
-public class Main_21568_AxByC {
+public class EEA {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         int A = sc.nextInt();
@@ -736,7 +734,7 @@ public class Main_21568_AxByC {
    2. 예 : `D[5][3] = D[4][2] + D[4][3]`
 
 ```java
-public class Main {
+public class Combination {
     static int N, K;
     static int[][] D;
     public static void main(String[] args) {
@@ -789,7 +787,7 @@ public class Main {
 ```java
 import java.util.ArrayList;
 
-public class Main {
+public class AdjacencyList {
    static ArrayList<Node>[] adj;
 
    static class Node {
@@ -824,7 +822,7 @@ public class Main {
 find 연산은 자신이 속한 집합의 대표 노드를 찾는 연산으로 그래프를 정돈하고 시간복잡도를 향상시킨다.(경로 압축의 효과)
 
 ```java
-public class Main {
+public class UnionFind {
     static int[] parent; // 대표 노드 배열
     public static void main(String[] args){
         parent = new int[n + 1];
@@ -868,7 +866,7 @@ union 연산은 그래프에서의 간선으로 표현될 수 있다. 따라서 
 import java.io.*;
 import java.util.*;
 
-public class Main {
+public class TopologySort {
     static ArrayList<Integer>[] graph;
     static int[] degree; // 진입 차수 배열
     public static void main(String[] args){
@@ -931,7 +929,7 @@ visited 배열을 사용하여 중복 카운트를 방지한다. (1516_게임개
 실제로 완성된 배열은 출발 노드와 이외의 모든 노드 간의 최단 거리를 표현하고 있다.
 
 ```java
-public class Main {
+public class Dijkstra {
     static public class Node implements Comparable<Node> {
         int to, cost;
         public Node(int to, int cost) {
@@ -1014,7 +1012,7 @@ public class Main {
    2. 만약 업데이트되는 노드가 있다면, 음수 사이클이 존재하여 최단 거리를 구할 수 없음 
 
 ```java
-public class Main_11657_타임머신으로빨리가기 {
+public class BellmanFord {
     static class Edge {
         int from, to, cost;
         public Edge(int from, int to, int cost) {
@@ -1081,7 +1079,7 @@ for 경유지 K에 관해 (1~N) // N=노드 개수
 ```
 
 ```java
-public class Main {
+public class FloydWarshall {
     public static void main(String[] args) {
         long[][] D = new long[N+1][N+1]; // 최단 거리 배열
         for(int i = 1; i <= N; i++){
@@ -1136,7 +1134,7 @@ public class Main {
 5. 총 에지 비용 출력하기
 
 ```java
-public class Main {
+public class MST {
     static PriorityQueue<Edge> edges; // 에지 리스트
     static class Edge implements Comparable<Edge> {
         int from, to, cost;
@@ -1260,7 +1258,7 @@ public class Main {
 
 
 ```java
-public class Main {
+public class IndexTree {
     static int N, M, K;
     static long[] input, tree;
     static int leafPointer;
@@ -1360,34 +1358,187 @@ public class Main {
 3. 깊이가 같은 상태에서는 동시에 부모 노드로 올라가면서 두 노드가 같은 노드가 될 때까지 반복한다.
 
 ```java
-public class Main {
-    static int LCA(int a, int b){
-        if(depth[a] < depth[b]){
-            int temp = a;
-            a = b;
-            b = temp;
-        }
-        while(depth[a] != depth[b]){
-            a = parent[a];
-        }
-        while(a != b){
-            a = parent[a];
-            b = parent[b];
-        }
+public class LCA1 {
+   static ArrayList<Integer>[] tree;
+   static int[] depth;
+   static int[] parent;
+   static boolean[] visited;
 
-        return a;
-    }
+   public static void main(String[] args) {
+      tree = new ArrayList[n+1];
+      for(int i = 1; i <= n; i++){
+         tree[i] = new ArrayList<>();
+      }
+      for(int i = 1; i < n; i++){
+         tree[s].add(e);
+         tree[e].add(s);
+      }
+
+      depth = new int[n+1];
+      parent = new int[n+1];
+      visited = new boolean[n+1];
+
+      BFS(1);
+      LCA(a, b);
+   }
+
+   static int LCA(int a, int b){
+      if(depth[a] < depth[b]){
+         int temp = a;
+         a = b;
+         b = temp;
+      }
+      while(depth[a] != depth[b]){
+         a = parent[a];
+      }
+      while(a != b){
+         a = parent[a];
+         b = parent[b];
+      }
+
+      return a;
+   }
+
+   static void BFS(int node){
+      Queue<Integer> q = new LinkedList<>();
+      q.add(node);
+      visited[node] = true;
+
+      int level = 1;
+      int nowSize = 1;
+      int cnt = 0;
+      while(!q.isEmpty()){
+         int now = q.poll();
+         for(int next : tree[now]){
+            if(!visited[next]){
+               visited[next] = true;
+               q.add(next);
+               parent[next] = now;
+               depth[next] = level;
+            }
+         }
+         cnt++;
+         if(cnt == nowSize){
+            cnt = 0;
+            nowSize = q.size();
+            level++;
+         }
+      }
+   }
 }
 ```
 
 ### 최소 공통 조상 빠르게 구하기
-빠르게 구하는 방식의 핵심은 서로의 깊이를 맞춰 주거나 같아지는 노드를 찾을 때 기존에 한 단계씩 올려 주는 방식에서
-2^K씩 올라가 비교하는 것이다.
+빠르게 구하는 방식의 핵심은 서로의 깊이를 맞춰 주거나 같아지는 노드를 찾을 때 기존에 한 단계씩 올려 주는 방식에서 2^K씩 올라가 비교하는 것이다.
 따라서 기존에 자신의 부모 노드만 저장해 놓던 방식에서 2^K번째 위치의 부모 노드까지 저장해 둬야 한다.
 
-1. 부모 노드 저장 배열 만들기
+1. 부모 노드 저장 배열 P 만들기
+   1. 부모 노드 배열의 정의 : `P[K][N] = N번 노드의 2^K번째 부모의 노드 번호`
+   2. 부모 노드 배열의 점화식 : `P[K][N] = P[K-1][P[K-1][N]]`
+   3. 점화식에서 N의 2^3번째 부모 노드는 N의 2^2번째 부모 노드의 2^2번째 부모노드라는 의미이다.
+   4. 예를 들어 N의 8번째 부모 노드는 N의 네번째 부모 노드의 네번째 부모노드이다.
+   5. 배열에서 K는 `트리의 깊이 > 2^K`를 만족하는 최댓값이다.
 2. 선택된 두 노드의 깊이 맞추기
+   1. 2^K 단위로 넘어가면서 깊이를 맞춘다.
+   2. 두 노드의 높이 차이 M을 구하고, 2^K <= M을 만족하면서 K가 최대가 되는 만큼 이동하면서 높이 차이가 0이 될 때까지 반복한다.
+   3. 예를 들어 높이 차이가 20이라면, 2^4<= 20 이므로 `P[4][N]`으로 16번째로 점프 -> 2^2<=4 이므로 `P[2][N]`으로 4번째 부모로 점프함 
 3. 최소 공통 조상 찾기
+   1. 마찬가지로 2^K 단위로 점프하면서 맞춘다.
+   2. K값을 1씩 감소하면서 P 배열을 이용해 최초로 두 노드의 부모가 달라지는 값을 찾는다.
+   3. 두 노드의 부모가 같으면 K를 1씩 감소하고, 이를 K가 0이 될 때까지 반복한다.
+   4. 반복문이 종료된 후 이동한 2개의 노드가 같은 노드라면 해당 노드가, 다른 노드라면 바로 위의 부모 노드가 최소 공통 조상이 된다.
+
+```java
+public class LCA2 {
+    static int N, M;
+    static ArrayList<Integer>[] adj;
+    static int[][] parent;
+    static int[] depth;
+    static boolean[] visited;
+    static int kMax; // 트리의 최대 가능 높이
+
+    public static void main(String[] args) {
+        adj = new ArrayList[N+1];
+        for (int i = 1; i <= N; i++) {
+            adj[i] = new ArrayList<>();
+        }
+
+        for (int i = 0; i < N - 1; i++) {
+            adj[a].add(b);
+            adj[b].add(a);
+        }
+
+        depth = new int[N+1];
+        visited = new boolean[N+1];
+
+        // 최대 가능 높이 구하기
+        int temp = 1;
+        kMax = 0;
+        while(temp <= N) {
+            temp *= 2;
+            kMax++;
+        }
+
+        parent = new int[kMax+1][N+1];
+        BFS(1); // parent와 depth 배열 초기화
+        // 점화식으로 k번째 부모 노드의 값 채우기
+        for(int k = 1; k <= kMax; k++) {
+            for(int n = 1; n <= N; n++) {
+                parent[k][n] = parent[k-1][parent[k-1][n]];
+            }
+        }
+
+        LCA(a,b);
+    }
+
+    static int LCA(int a, int b) {
+        if(depth[a] < depth[b]) {
+            int temp = a;
+            a = b;
+            b = temp;
+        }
+
+        // 1. depth 맞추기
+        for(int k = kMax; k >= 0; k--) {
+            if(Math.pow(2, k) <= depth[a] - depth[b]){
+                a = parent[k][a];
+            }
+        }
+
+        //depth를 맞췄는데 조상이 같으면 바로 종료
+        if(a==b) return a;
+
+        // 2. LCA 찾기 : 2^K승 점프를 하면서 공통부모 바로 아래까지 올리기
+        for(int k = kMax-1; k >= 0; k--) {
+            if(parent[k][a] != parent[k][b]) {
+                a = parent[k][a];
+                b = parent[k][b];
+            }
+        }
+
+        // 공통부모 바로 아래에서 반복문이 끝났으므로, 첫 번째 부모(2^0)을 리턴
+        return parent[0][a];
+    }
+
+    static void BFS(int node) {
+        Queue<Integer> q = new LinkedList<>();
+        q.add(node);
+        visited[node] = true;
+
+        while(!q.isEmpty()) {
+            int now = q.poll();
+            for(int next: adj[now]) {
+                if(!visited[next]) {
+                    visited[next] = true;
+                    parent[0][next] = now;
+                    depth[next] = depth[now]+1;
+                    q.add(next);
+                }
+            }
+        }
+    }
+}
+```
 
 ---
 
