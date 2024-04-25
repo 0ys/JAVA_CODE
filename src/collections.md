@@ -103,7 +103,8 @@ import java.util.Stack;
 
 public class Main {
     public static void main(String[] args) {
-        Stack<Integer> stack = new Stack<>();
+        // Stack<Integer> stack = new Stack<>();
+        Deque<Integer> stack = new ArrayDeque<Integer>();
 
         stack.push(1);
         stack.pop();
@@ -196,8 +197,38 @@ public class Main {
 
 ## ArrayDeque
 ```java
-ArrayDeque<A> deque = new ArrayDeque<>();
+public class Main {
+    public static void main(String[] args) {
+        ArrayDeque<Integer> deque = new ArrayDeque<>();
+
+        deque.addFirst(1);
+        deque.removeFirst();
+        deque.addLast(2);
+        deque.removeLast();
+        deque.pollFirst();
+        deque.pollLast();
+        deque.getFirst();
+        deque.getLast();
+        deque.peekFirst();
+        deque.peekLast();
+    }
+}
 ```
+ArrayDeque 공식문서에 보면 스택구조로 사용하면 Stack 클래스보다 빠르고, 큐 구조로 사용하면 Queue 클래스보다 빠르다.
+다만 Thread-Safe하지 않아 멀티 쓰레드 환경에서는 문제가 있다. (synchronized를 장식해 만들어야 함)
+
+### ArrayDeque vs LinkedList
+ArrayDeque는 Queue의 서브인터페이스인 Deque의 구현체이고, LinkedList는 List와 Queue의 구현체이다. 
+따라서 LinkedList는 List의 특징을 가지고 있고, ArrayDeque은 배열의 특성을 가지고 있다고 할 수 있다. 
+
+- 연산 성능 
+  - ArrayDeque을 배열의 측면에서 바라봤을 때, deque의 양끝에서 삽입/삭제 연산이 일어날 경우 시간 복잡도가 O(1)이므로 삽입/삭제 성능이 우수하다. 또한 Random access가 가능하기에 원소 조회 시에도 속도가 빠르다. 
+  - LinkedList도 삽입/삭제 연산 성능이 좋지만, 특정 원소에 접근 시의 성능은 ArrayDeque에 비해 떨어진다. 
+  - ArrayDeque는 LinkedList에 비해 cache-locality에 더 친숙하여 연산 속도가 더 빠르다.
+- 메모리 
+  - ArrayDeque은 LinkedList와 달리 다음 노드에 대한 참조를 유지할 필요가 없기 때문에 더 적은 메모리를 사용한다.
+
+이런 차이점 때문에 큐 구현 시 ArrayDeque가 LinkedList보다 속도와 메모리 측면에서 더 효율적이라고 할 수 있으며, 이는 자바 공식문서에도 언급되어있다.
 
 ## Sort
 

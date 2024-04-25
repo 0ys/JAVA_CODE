@@ -6,9 +6,9 @@ public class LowerUpperBound {
     // static int[] input = new int[]{1, 3, 4, 5};
 
     public static void main(String[] args) throws Exception{
-//        System.out.println("# API index:" + Arrays.binarySearch(input, 4));
-        System.out.println("# lowerbound index:" + lowerBound(2));
-        System.out.println("# upperbound index:" + upperBound(2));
+        System.out.println("# API index:" + Arrays.binarySearch(input, 2)); // 3
+        System.out.println("# lowerbound index:" + lowerBound(2)); // 1
+        System.out.println("# upperbound index:" + upperBound(2)); // 4
     }
 
     static int lowerBound(int target){

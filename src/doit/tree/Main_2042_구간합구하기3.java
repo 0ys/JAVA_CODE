@@ -1,4 +1,4 @@
-package doit.graph;
+package doit.tree;
 
 import java.io.*;
 import java.util.StringTokenizer;

@@ -1,3 +1,64 @@
+- [알고리즘](#----)
+   * [알고리즘 정리](#-------)
+   * [알고리즘 문제풀이 기초](#------------)
+      + [시간복잡도 문제 해결](#-----------)
+         - [예시 : 제한시간이 1초일때](#-----------1---)
+   * [자바에서의 형변환](#---------)
+- [정렬](#--)
+   * [정렬의 응용](#------)
+   * [라이브러리를 이용한 정렬](#-------------)
+   * [병합 정렬 (=분할 정복 Divide and Conquer) O(NlogN)](#--------------divide-and-conquer--o-nlogn-)
+      - [2개의 그룹을 병합하는 과정](#2--------------)
+- [탐색](#--)
+   * [합 배열](#----)
+   * [2 Pointers O(N)](#2-pointers-o-n-)
+   * [슬라이딩 윈도우 O(N)](#---------o-n-)
+      + [Deque](#deque)
+   * [Lower & Upper Bound O(logN)](#lower---upper-bound-o-logn-)
+   * [깊이 우선 탐색 DFS O(V+E)](#---------dfs-o-v-e-)
+      - [응용 문제](#-----)
+   * [너비 우선 탐색 BFS O(V+E)](#---------bfs-o-v-e-)
+      - [응용 문제](#------1)
+   * [이진 탐색 O(logN)](#------o-logn-)
+   * [우선순위 큐 Priority Queue : O(NlogN)](#-------priority-queue---o-nlogn-)
+- [정수론](#---)
+   * [에라토스테네스의 체](#----------)
+   * [팰린드롬 수](#------)
+   * [오일러 피](#-----)
+   * [유클리드 호제법](#--------)
+      - [최소 공배수: `A*B/gcd(A, B)`](#---------a-b-gcd-a--b--)
+      - [세 개 이상의 정수의 최대 공약수를 구하는 방법](#--------------------------)
+   * [확장 유클리드 호제법 (베주 항등식 Bezout's identity)](#--------------------bezout-s-identity-)
+      - [5x+9y=2일 때 이 식을 만족하는 정수 x, y를 구해보자.](#5x-9y-2-----------------x--y------)
+- [조합](#--)
+- [그래프](#---)
+   * [그래프의 표현](#-------)
+      - [에지 리스트](#------)
+      - [인접 행렬](#-----)
+      - [인접 리스트](#------)
+   * [유니온파인드](#------)
+      - [그래프 내 사이클을 판별 = MST에서 활용](#----------------mst-----)
+   * [위상정렬 O(V+E)](#-----o-v-e-)
+   * [다익스트라 O(ElogV)](#------o-elogv-)
+   * [벨만-포드 O(VE)](#------o-ve-)
+   * [플로이드-워셜 O(V^3)](#--------o-v-3-)
+   * [최소 신장 트리 (MST; Minimum Spanning Tree)](#----------mst--minimum-spanning-tree-)
+      + [크루스칼 O(ElogV)](#-----o-elogv-)
+- [트리](#--)
+   * [코딩 테스트에서 트리 문제 유형](#-----------------)
+   * [이진 트리](#-----)
+      + [트리의 노드와 배열의 인덱스 사이 상관 관계](#------------------------)
+   * [인덱스 트리 O(MlogN)](#-------o-mlogn-)
+      + [1. 트리 초기화하기](#1---------)
+      + [2. 질의값 구하기 (구간합 또는 최대, 최소)](#2------------------------)
+      + [3. 데이터 업데이트하기](#3-----------)
+   * [최소 공통 조상 (LCA; Lowest Common Ancestor)](#----------lca--lowest-common-ancestor-)
+      + [일반적인 최소 공통 조상 구하기](#-----------------)
+      + [최소 공통 조상 빠르게 구하기](#----------------)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
+
 # 알고리즘
 ## 알고리즘 정리
 |   구분    | 알고리즘              | 시간복잡도    | 구현 유형         | 사용 기법          |
@@ -60,6 +121,33 @@
 - N<=500 : N^3
 - N<=1,000 : N^2, N^2logN
 - N<=100,000 : N, NlogN, logN, O(1)
+
+## 자바에서의 형변환
+```java
+public class Main {
+    public static void main(String[] args) {
+        String sNum = "1234";
+        int i1 = Integer.parseInt(sNum);
+        int i2 = Integer.valueOf(sNum);
+        double d1 = Double.parseDouble(sNum);
+        double d2 = Double.valueOf(sNum);
+        float f1 = Float.parseFloat(sNum);
+        float f2 = Float.valueOf(sNum);
+        long l1 = Long.parseLong(sNum);
+        long l2 = Long.valueOf(sNum);
+        short s1 = Short.parseShort(sNum);
+        short s2 = Short.valueOf(sNum);
+        char c1 = sNum.charAt(0);
+
+        int i3 = 1234;
+        double d3 = 12.34;
+        String sNum2 = String.valueOf(i3);
+        String sNum3 = Integer.toString(i3);
+        String sNum4 = String.valueOf(d3);
+        String sNum5 = Double.toString(d3);
+    }
+}
+```
 
 # 정렬
 ## 정렬의 응용
@@ -151,13 +239,194 @@ public class Main {
 ```
 ---
 # 탐색
-## 백트래킹
+## 합 배열
+합 배열을 이용하여 특정 범위의 값들의 합(구간합)을 빠른 시간 안에 구할 수 있다.
+합 배열을 미리 계산해두면 구간 합은 한 번의 계산으로 구할 수 있게 된다. 
+다만 배열 A의 값이 계속 변화할 경우, 구간 합은 인덱스 트리를 활용해야 한다.
+
+- 합 배열 S의 정의 : `S[i] = A[0] + A[1] + A[2] + ... + A[i-1] + A[i]`
+- 합 배열 만드는 공식 : `S[i] = S[i-1] + A[i]`
+- 구간 합 구하는 공식 : `S[j] - S[i-1]` // i에서 j까지 구간 합
+- 2차원 구간 합 배열 D 정의 : `D[X][Y] = 원본 배열의 (0, 0)부터 (X, Y)까지의 사각형 영역 안에 있는 수의 합`
+- `D[i][j]` 만드는 공식 : `D[i][j] = D[i][j-1] + D[i-1][j] - D[i-1][j-1] + A[i][j]`
+- 구간 합 구하는 공식 : `D[x2][y2] - D[x1-1][y2] - D[x2][y1-1] + D[x1-1][y1-1]`
+
+```java
+public class Main {
+    static int N, M;
+    public static void main(String[] args) {
+        // 1차원 배열 구간 합 구하기
+        long[] sum = new long[N+1];
+        for(int i=1; i<=N; i++) {
+            sum[i] += sum[i-1]+Integer.parseInt(st.nextToken());
+        }
+
+        int answer = sum[j]-sum[i-1];
+        
+        // 2차원 배열 구간 합 구하기
+        int[][] arr = new int[N+1][N+1];
+        for(int i=1; i<=N; i++){
+           for(int j=1; j<=N; j++){
+              arr[i][j] = Integer.parseInt(st.nextToken());
+           }
+        }
+
+        int[][] sum = new int[N+1][N+1];
+        for(int i=1; i<=N; i++){
+           for(int j=1; j<=N; j++){
+              sum[i][j] = sum[i][j-1] + sum[i-1][j] - sum[i-1][j-1] + arr[i][j];
+           }
+        }
+
+        int answer = sum[x2][y2] - sum[x2][y1-1] - sum[x1-1][y2] + sum[x1-1][y1-1];
+    }
+}
+```
 
 ## 2 Pointers O(N)
+2개의 포인터로 알고리즘의 시간 복잡도를 최적화한다.
+특히 시간 제한이 1초일 때, N의 최댓값이 5,000,000이면 O(N)의 시간 복잡도를 가진 알고리즘을 사용해야 하므로 투 포인터를 많이 쓴다.
+
+- 정렬된 데이터를 빠르게 탐색
+- 두 가지 배열의 교집합을 비교
+
+1. 시작 인덱스와 종료 인덱스를 투 포인터로 지정함
+   1. 보통 정렬된 데이터에 대해 양쪽 끝 값으로 지정하고 탐색하거나
+   2. 또는 첫 번째 값을 동시에 가리키면서 차례로 이동해나가기도 함
+2. 투 포인터 이동 원칙에 따라 배열의 끝까지 탐색함
+   1. 예를 들어, 연속된 자연수의 합을 구할 때 투 포인터 이동 원칙은 아래와 같음
+   2. startIndex와 endIndex를 첫 번째 인덱스 값으로 초기화함, endIndex == N까지 탐색함
+   2. `sum > N : sum=sum-startIndex; startIndex++;`
+   3. `sum < N : endIndex++; sum=sum+endIndex;`
+   4. `sum == N : endIndex++; sum=sum+endIndex; count++;`
+   5. 또는 두 데이터의 합을 구할 때 이동 원칙은 아래와 같음
+   6. 투 포인터 i, j를 양쪽 끝에 위치시킨 후, i와 j가 만날 때까지 이동함
+   6. `A[i] + A[j] > M; j--;'`
+   7. `A[i] + A[j] < M; i++;`
+   8. `A[i] + A[j] == M; i++; j--; count++;`
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        int[] arr = new int[N];
+        for(int i=0; i<N; i++){
+            arr[i] = Integer.parseInt(st.nextToken());
+        }
+        Arrays.sort(arr);
+
+        int start = 0;
+        int end = N-1;
+        int cnt = 0;
+        while(start<end){
+            int sum = arr[start]+arr[end];
+            if(sum == M){
+                cnt++;
+                start++;
+                end--;
+            } else if(sum < M){
+                start++;
+            } else {
+                end--;
+            }
+        }
+
+        System.out.println(cnt);
+    }
+}
+```
 
 ## 슬라이딩 윈도우 O(N)
+슬라이딩 윈도우 알고리즘은 2개의 포인터로 범위(window)를 지정한 다음, window를 유지한 채로 이동(sliding)하여 문제를 해결한다.
+
+ - 슬라이딩 윈도우인 부분 배열 P와 문제의 조건을 체크하는 상태 배열을 선언하여 윈도우가 이동할 때마다 상태 배열을 업데이트함
+   - 현재 상태 배열을 업데이트할 때는 빠지는 데이터와 신규 데이터만 보고 업데이트하기 때문에 O(N)의 시간 복잡도를 가짐
+   - ADD()와 REMOVE() 함수를 각각 조건에 맞게 구현할 수 있음
+ - 데이터가 너무 커서 NlogN의 정렬을 사용할 수 없는 경우, 슬라이딩 윈도우를 deque로 구현하여 정렬 효과를 볼 수 있음
+   - 예를 들어, 일정 범위 안의 최솟값을 찾는 문제에서 덱에 (인덱스, 숫자) 형태의 새 노드를 저장할 때,
+   - 덱의 뒤에서부터 비교하여 저장된 노드의 숫자가 크면 removeLast() 하고 숫자가 작으면 addLast() 함
+   - 이렇게 하면 덱에는 노드가 오름차순으로 정렬됨
+   - 인덱스 범위가 슬라이딩 윈도우를 벗어날 경우 removeFirst()로 맨 앞 노드를 제거함
+
+### Deque
+덱은 양 끝에서 데이터를 삽입하거나 삭제할 수 있는 자료구조이다.
+LinkedList와 ArrayDeque 모두로 구현할 수 있는데, ArrayDeque가 좀 더 유리하다.
+ArrayDeque 공식문서에 보면 스택구조로 사용하면 Stack 클래스보다 빠르고, 큐 구조로 사용하면 Queue 클래스보다 빠르다.
+
+- addFirst(), removeFirst()
+- addLast(), removeLast()
+
+```java
+import java.util.ArrayDeque;
+import java.util.Deque;
+
+public class Main {
+    public static void main(String[] args) {
+        Deque<Integer> deque = new ArrayDeque<>();
+
+        deque.addFirst(1);
+        deque.removeFirst();
+        deque.addLast(2);
+        deque.removeLast();
+        deque.pollFirst();
+        deque.pollLast();
+        deque.getFirst();
+        deque.getLast();
+        deque.peekFirst();
+        deque.peekLast();
+    }
+}
+```
 
 ## Lower & Upper Bound O(logN)
+lower bound는 하한선, upper bound는 상한선을 의미한다.
+이 때 upper bound는 타겟보다 처음으로 큰 수를 가리킨다.
+이진 탐색으로 원하는 타겟의 범위 인덱스를 구한다.
+
+- 빈도 구하기
+
+```java
+public class LowerUpperBound {
+    static int[] input = new int[]{1, 2, 2, 2, 3, 4, 5};
+
+    public static void main(String[] args) {
+        System.out.println("# API index:" + Arrays.binarySearch(input, 2)); // 3
+        System.out.println("# lowerbound index:" + lowerBound(2)); // 1
+        System.out.println("# upperbound index:" + upperBound(2)); // 4
+    }
+
+    static int lowerBound(int target){
+        int low = 0;
+        int high = input.length;
+        int mid;
+
+        while(low < high){
+            mid = (low + high)/2;
+            if(input[mid] >= target){
+                high = mid;
+            }else{
+                low = mid + 1;
+            }
+        }
+        return high;
+    }
+
+    static int upperBound(int target){
+        int low = 0;
+        int high = input.length;
+        int mid;
+
+        while(low < high){
+            mid = (low + high)/2;
+            if(input[mid] > target){
+                high = mid;
+            }else{
+                low = mid + 1;
+            }
+        }
+        return high;
+    }
+}
+```
 
 ## 깊이 우선 탐색 DFS O(V+E)
 그래프 완전 탐색 기법 중 하나이다.
@@ -223,12 +492,19 @@ public class Main {
 ```
 
 ## 이진 탐색 O(logN)
-데이터가 정렬돼 있는 상태에서 대상 데이터의 중앙값과 찾고자 하는 값을 비교해
-데이터의 크기를 절반씩 줄이면서 대상을 찾는다.
+데이터가 정렬돼 있는 상태에서 대상 데이터의 중앙값과 찾고자 하는 값을 비교해 데이터의 크기를 절반씩 줄이면서 대상을 찾는다.
 이진 탐색을 사용하면 N개의 데이터에서 logN 번의 연산으로 원하는 데이터의 위치를 찾을 수 있다.
 다만 이진 탐색은 데이터가 정렬되어 있어야 한다.
 ```java
+import java.util.Arrays;
+
 public class Main {
+   public static void main(String[] args) {
+      int[] a = new int[5];
+      int key = 1;
+      Arrays.binarySearch(a, key); // API 호출해서 간단하게 사용할 수 있음
+      // 중복된 값이 있을 경우, 타겟의 가장 마지막 인덱스를 반환함
+   }
    static boolean binarySearch(int target){
       boolean find = false;
       int start = 0;
@@ -315,10 +591,6 @@ public class Main {
 ```java
 public class Main_1929_소수구하기 {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int M = sc.nextInt();
-        int N = sc.nextInt();
-
         int[] prime = new int[N+1]; // 1차원 배열 생성 후 초기화
         for(int i=2; i<=N; i++){
             prime[i] = i;
@@ -410,6 +682,12 @@ static int gcd(int a, int b){
 }
 ```
 #### 최소 공배수: `A*B/gcd(A, B)`
+```java
+//LCM 최소공배수 = (a*b)/gcd(a,b)
+ static int lcm(int a, int b) {
+     return a * b / gcd(a,b);
+ }
+```
 #### 세 개 이상의 정수의 최대 공약수를 구하는 방법
 유클리드 호제법을 재귀적으로 사용한다. 
 `gcd(A, B, C) = gcd(gcd(A, B), C)`를 이용한다.
@@ -462,6 +740,50 @@ public class Main_21568_AxByC {
     public static int gcd(int a, int b){
         if(b == 0) return a;
         return gcd(b, a%b);
+    }
+}
+```
+
+---
+# 조합
+알고리즘에서 조합을 구현할 때는 수학 공식을 코드화하지 않고 점화식을 사용해 표현한다.
+
+1. 특정 문제를 가정하기
+   - 예를 들어 5개의 데이터 중 3개를 선택하는 조합의 경우의 수를 구해보자
+2. 모든 부분 문제가 해결된 상황이라고 가정하고 지금 문제 생각하기
+   - 먼저 5개의 데이터 중 4개를 이미 선택이 완료된 데이터라고 가정한다. 그리고 마지막 데이터의 선택 여부에 따른 경우의 수를 계산한다.
+   - 만약 마지막 데이터를 포함해 총 3개의 데이터를 선택하려면 선택이 완료됐다고 가정한 4개의 데이터에서 2개를 선택해야 한다.
+   - 마지막 데이터를 포함하지 않고 총 3개의 데이터를 선택하려면 이전 데이터 4개 중 3개를 선택해야 한다.
+   - 위의 2가지 경우의 수를 합치면 데이터 5개 중 3개를 선택하는 경우의 수가 나온다.
+3. 특정 문제를 해결한 내용을 바탕으로 일반 점화식 도출하기
+   1. 조합 점화식 : `D[i][j] = D[i-1][j] + D[j-1][i-1]`
+   2. 예 : `D[5][3] = D[4][2] + D[4][3]`
+
+```java
+public class Main {
+    static int N, K;
+    static int[][] D;
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        N = sc.nextInt();
+        K = sc.nextInt();
+
+        // DP 배열 초기화
+        D = new int[N+1][N+1];
+        for(int i = 0; i <= N; i++){
+            D[i][1] = i;
+            D[i][0] = 1;
+            D[i][i] = 1;
+        }
+
+        // 조합 기본 점화식으로 채우기
+        for(int i = 2; i <= N; i++){ 
+            for(int j = 1; j < i; j++){ // 대각선 아래쪽 배열만 채우게 됨
+                D[i][j] = D[i-1][j-1] + D[i-1][j];
+            }
+        }
+
+        System.out.println(D[N][K]);
     }
 }
 ```
@@ -572,25 +894,25 @@ import java.util.*;
 
 public class Main {
     static ArrayList<Integer>[] graph;
-    static int[] D; // 진입 차수 배열
+    static int[] degree; // 진입 차수 배열
     public static void main(String[] args){
         int n, m; // input
         graph = new ArrayList[n+1];
         for(int i = 1; i <= n; i++){
             graph[i] = new ArrayList<>();
         }
-        D = new int[n+1];
+        degree = new int[n+1];
 
         for (int i = 1; i <= m; i++) {
             int a, b; //input
             graph[a].add(b);
-            D[b]++;
+            degree[b]++;
         }
         
         // 위상 정렬 수행
         Queue<Integer> q = new LinkedList<>();
         for(int i = 1; i <= n; i++){
-            if(D[i] == 0){ // 진입 차수가 0인 노드를 찾아 큐에 추가
+            if(degree[i] == 0){ // 진입 차수가 0인 노드를 찾아 큐에 추가
                 q.add(i);
             }
         }
@@ -600,10 +922,10 @@ public class Main {
             int now = q.poll();
             System.out.print(now+" "); // 정렬된 노드 출력
             for(int next : graph[now]){
-                D[next]--; // 선택된 노드가 가리키는 노드들의 진입 차수를 1씩 뺌
+                degree[next]--; // 선택된 노드가 가리키는 노드들의 진입 차수를 1씩 뺌
                 result[next] = Math.max(result[next], result[now]+next.value); // 임계 경로 값 구하기
                // 타깃 노드의 현재 경로 값과 (현재 노드의 경로 값 + 도로의 시간값) 중 큰 값으로 저장함
-                if(D[next] == 0){
+                if(degree[next] == 0){
                     q.add(next); // 다음 선택 노드를 큐에 추가
                 }
             }
@@ -971,8 +1293,7 @@ public class Main {
         for(int i=0; i<N; i++) {
             input[i]= Long.parseLong(br.readLine());
         }
-
-        // tree 초기화
+        
         initTree();
         query(2, 7);
         update(3, 5);
@@ -1052,7 +1373,45 @@ public class Main {
 ```
 
 ## 최소 공통 조상 (LCA; Lowest Common Ancestor)
+트리 그래프에서 임의의 두 노드를 선택했을 때 처음 공통으로 만나게 되는 부모 노드를 최소 공통 조상이라고 한다.
 
+### 일반적인 최소 공통 조상 구하기
+트리의 높이가 크지 않을 때(시간 제한이 여유로울 때) 이 방법으로 구할 수 있다.
+
+1. 루트 노드에서 DFS 또는 BFS 탐색을 시작해 각 노드의 부모 노드와 깊이를 저장한다.
+2. 선택된 두 노드의 깊이가 다른 경우, 더 깊은 노드를 부모 노드로 1개씩 올려주면서 같은 깊이로 맞춘다. 
+   1. 이때 두 노드가 같으면 해당 노드가 최소 공통 조상이므로 탐색을 종료한다.
+3. 깊이가 같은 상태에서는 동시에 부모 노드로 올라가면서 두 노드가 같은 노드가 될 때까지 반복한다.
+
+```java
+public class Main {
+    static int LCA(int a, int b){
+        if(depth[a] < depth[b]){
+            int temp = a;
+            a = b;
+            b = temp;
+        }
+        while(depth[a] != depth[b]){
+            a = parent[a];
+        }
+        while(a != b){
+            a = parent[a];
+            b = parent[b];
+        }
+
+        return a;
+    }
+}
+```
+
+### 최소 공통 조상 빠르게 구하기
+빠르게 구하는 방식의 핵심은 서로의 깊이를 맞춰 주거나 같아지는 노드를 찾을 때 기존에 한 단계씩 올려 주는 방식에서
+2^K씩 올라가 비교하는 것이다.
+따라서 기존에 자신의 부모 노드만 저장해 놓던 방식에서 2^K번째 위치의 부모 노드까지 저장해 둬야 한다.
+
+1. 부모 노드 저장 배열 만들기
+2. 선택된 두 노드의 깊이 맞추기
+3. 최소 공통 조상 찾기
 
 ---
 
