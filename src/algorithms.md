@@ -56,16 +56,16 @@
 |           | 파스칼의 삼각형          |          |               |                |
 
 
-|       구분        | 알고리즘                    | 확장 알고리즘                      | 시간복잡도 | 구현유형   | 사용기법              | 간선방향        |
-|:---------------:|-------------------------| ---------------------------------- | ---------- | ---------- | --------------------- | --------------- |
-|       트리        | LCA<br>(공통조상찾기)         |                                    | NlogN      | List       |                       |                 |
-|                 | 인덱스트리<br>(Segment Tree) | 펙웍트리(BIT)<br>Lazy Propagation  | NlogN      | 배열       | 이진탐색              |                 |
-|  그래프 <br>최단경로   | 다익스트라                   |                                    | ElogV      | List, 배열 | 우선순위큐            | 방향,<br>무방향 |
-|                 | 벨만포드                    |                                    | VE         | List, 배열 | 완전탐색<br>음수가능  | 방향,<br>무방향 |
-|                 | 플로이드-워셜                 |                                    | V^3        | 배열       | 완전탐색<br>음수가능  | 방향,<br>무방향 |
-| 최소신장<br>트리(MST) | 크루스칼 Kruscal            |                                    | ElogV      | List, 배열 | 탐욕법,<br>UnionFind  | 무방향          |
-|                 | 프림 Prim                 |                                    | V^2        | List, 배열 | 탐욕법,<br>우선순위큐 | 무방향          |
-|       그래프       | 위상정렬                    |                                    | V+E        | List, 배열 | DAG                   | 방향            |
+|       구분        | 알고리즘                    | 확장 알고리즘           | 시간복잡도 | 구현유형     | 사용기법              | 간선방향        |
+|:---------------:|-------------------------|-------------------| ---------- |----------| --------------------- | --------------- |
+|       트리        | LCA<br>(공통조상찾기)         |                   | NlogN      | List     |                       |                 |
+|                 | 인덱스트리<br>(Segment Tree) | 펙웍트리(BIT)<br>Lazy Propagation | NlogN      | 배열       | 이진탐색              |                 |
+|  그래프 <br>최단경로   | 다익스트라                   |                   | ElogV      | 인접 리스트   | 우선순위큐            | 방향,<br>무방향 |
+|                 | 벨만포드                    |                   | VE         | 에지 리스트   | 완전탐색<br>음수가능  | 방향,<br>무방향 |
+|                 | 플로이드-워셜                 |                   | V^3        | 인접 행렬    | 완전탐색<br>음수가능  | 방향,<br>무방향 |
+| 최소신장<br>트리(MST) | 크루스칼 Kruscal            |                   | ElogV      | List, 배열 | 탐욕법,<br>UnionFind  | 무방향          |
+|                 | 프림 Prim                 |                   | V^2        | List, 배열 | 탐욕법,<br>우선순위큐 | 무방향          |
+|       그래프       | 위상정렬                    |                   | V+E        | List, 배열 | DAG                   | 방향            |
 |                 | 단절점, 단절선                | 강한 연결 요소<br>- 타잔, 코사라주 | V+E        | List, 배열 |                       | 무방향          |
 
 
@@ -101,13 +101,13 @@
 public class Main {
     public static void main(String[] args) {
         String sNum = "1234";
-        int i1 = Integer.parseInt(sNum);
+        int i1 = Integer.parseInt(sNum); // 4 byte : -2,147,483,648 ~ 2,147,483,647
         int i2 = Integer.valueOf(sNum);
         double d1 = Double.parseDouble(sNum);
         double d2 = Double.valueOf(sNum);
         float f1 = Float.parseFloat(sNum);
         float f2 = Float.valueOf(sNum);
-        long l1 = Long.parseLong(sNum);
+        long l1 = Long.parseLong(sNum); // 8 byte
         long l2 = Long.valueOf(sNum);
         short s1 = Short.parseShort(sNum);
         short s2 = Short.valueOf(sNum);
@@ -1029,10 +1029,12 @@ public class Dijkstra {
 
 1. 에지 리스트로 그래프를 구현(`ArrayList<edge> edges;`)하고, 최단 경로 배열(`DP[index]`)을 초기화함
    1. edge 클래스는 일반적으로 출발 노드, 도착 노드와 가중치 변수로 구성됨 
-   2. 최단 경로 배열은 출발 노드는 0, 나머지 노드는 무한대로 초기화함
+   2. 최단 경로 배열은 출발 노드는 0, 나머지 노드는 무한대로 초기화함(기본구조)
+   3. 하지만 초기값은 문제의 조건에 따라 달라질 수 있음!
 2. 모든 에지를 확인해 N-1번 정답 배열을 업데이트함
    1. 노드의 개수가 N이고, 음수 사이클이 없을 때 특정 두 노드의 최단 거리를 구성할 수 있는 에지의 최대 개수는 N-1개임
    2. `DP[s] != 무한대`이며 `DP[e] > DP[s] + w` 일 때 `DP[e] = DP[s] + w`로 배열의 값을 업데이트함
+      - `DP[s]`가 무한대라면, 시작 노드가 현재 미방문 상태라는 뜻으로 경로 탐색에 포함되지 않음
    3. 업데이트 반복 횟수가(에지 사용 횟수)가 k번이라면 해당 시점에 정답 배열의 값은 시작점에서 k개의 에지를 사용했을 때 각 노드에 대한 최단 거리임
 3. 음수 사이클이 존재하는지 확인하기 위해 한번 더 업데이트를 수행함
    1. 모든 에지를 한 번씩 다시 사용해 업데이트되는 노드가 발생하는지 확인함.
@@ -1070,8 +1072,10 @@ public class BellmanFord {
                 int end = e.to;
                 int time = e.cost;
                 // 정답 배열 업데이트 조건 : 무한대가 아닌 DP 값 중에 최단 거리
+                // 현재 DP 값이 무한대인 노드는 미방문 노드임
+                // 방문한 노드 중에서 새로운 경로에 해당하는 경우 DP 값을 업데이트함
                 if(DP[start] != Long.MAX_VALUE && DP[end] > DP[start]+time) {
-                    DP[end] = DP[start]+time;
+                    DP[end] = DP[start]+time; // 값이 더 작아지는 경로가 발생했으므로 업데이트함
                     if(i==N) checked = true; // N 번째에 업데이트가 발생함 = 음수 사이클이 존재함
                 }
             }
@@ -1081,6 +1085,7 @@ public class BellmanFord {
 ```
 위의 알고리즘처럼 최단 거리를 구하는 것이 아닌, 최대 비용을 구하고 싶을 때는 DP 업데이트 방식을 반대로 변경해주면 된다. 
 즉 `DP[end] < DP[start]+time`일 때 업데이트하며, 이 때 음수 사이클 검사 구문도 양수 사이클을 찾는 구문으로 바뀌게 된다.
+무한대가 발생하는 경우를 찾아야할 때는 DP 업데이트를 하는 For 문을 N번이 아니라, 충분히 큰 수만큼 반복하여 싸이클이 전파되도록 하여 무한대를 검사할 수 있다.
 
 ## 플로이드-워셜 O(V^3)
 정해진 시작점 없이, 주어진 모든 노드 간의 최단 경로를 탐색한다. 시간복잡도가 크기 때문에 주어진 정점 V가 500개 이하일 때 사용할 수 있다.
