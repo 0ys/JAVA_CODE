@@ -31,6 +31,7 @@
 - [트리](#--)
    * [코딩 테스트에서 트리 문제 유형](#코딩-테스트에서-트리-문제-유형)
    * [이진 트리](#이진-트리)
+   * [트라이](#트라이)
    * [인덱스 트리 O(MlogN)](#인덱스-트리-omlogn)
    * [최소 공통 조상(LCA)](#최소-공통-조상-lca-lowest-common-ancestor)
 
@@ -1247,7 +1248,72 @@ public class MST {
 | 왼쪽 자식 노드  | index = index * 2     | index * 2 <= N     |
 | 오른쪽 자식 노드 | index = index * 2 + 1 | index * 2 + 1 <= N |
 
+## 트라이
+문자열 검색을 빠르게 실행할 수 있도록 설계한 트리 형태의 자료구조이다.
+- N진 트리: 문자 종류의 개수에 따라 N이 결정됨, 예를 들어 알파벳은 26개의 문자로 이뤄져 있으므로 26진 트리로 구성됨
+- 루트 노드는 항상 빈 문자열을 뜻하는 공백 상태를 유지함
+- 각 노드는 기본적으로 N개의 공백 노드를 자식으로 가짐
 
+1. 루트 노드는 공백으로 유지하며, 문자열의 각 알파벳에 해당하는 노드를 생성함
+2. 다음 문자열을 삽입할 때는 루트 노드부터 검색하여 자료 구조를 생성함
+   1. 새로운 알파벳 노드가 공백 상태가 아니라면 이동하고,
+   2. 공백 상태하면 신규 노드를 생성함
+   3. 문자열의 마지막에 도달하면 리프 노드를 표시해줌
+3. 트라이 자료 구조로 대상 문자열을 검색할 때,
+   1. 루트부터 문자열이 끝날 때까지 공백이 없고, 
+   2. 현재 문자의 마지막 노드가 트라이의 리프 노드라면 이 문자는 트라이 구조에 포함됨
+
+
+```java
+public class Trie {
+    static class tNode {
+        tNode[] next = new tNode[26];
+        boolean isEnd;
+    }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        tNode root = new tNode(); // 루트 노드는 공백 노드
+
+        // 트라이 자료구조 생성
+        for (int i = 0; i < n; i++) {
+            String text = sc.next();
+            tNode now = root;
+            for(int j = 0; j < text.length(); j++) {
+                char c = text.charAt(j);
+                // 26개 알파벳의 위치를 배열 index로 나타내기 위해 (c - 'a')를 수행함
+                if(now.next[c - 'a'] == null) { // 현재 문자가 공백상태라면 노드를 추가해줌
+                    now.next[c - 'a'] = new tNode();
+                }
+                now = now.next[c - 'a']; // 다음 문자로 이동
+                if(j == text.length() - 1) {
+                    now.isEnd = true; // 리프 노드를 표시
+                }
+            }
+        }
+
+        // 트라이 자료구조 검색
+        int cnt = 0;
+        for(int i = 0; i < m; i++) {
+            String text = sc.next();
+            tNode now = root;
+            for(int j = 0; j < text.length(); j++) {
+                char c = text.charAt(j);
+                if(now.next[c - 'a'] == null) { // 공백 노드라면 검색 중단
+                    break;
+                }
+                now = now.next[c - 'a'];
+                if(j == text.length() - 1 && now.isEnd) {
+                    cnt++;
+                }
+            }
+        }
+
+        System.out.println(cnt);
+    }
+}
+```
 
 ## 인덱스 트리 O(MlogN)
 주어진 데이터들의 구간 합과 데이터 업데이트를 빠르게 수행하기 위해 고안해낸 자료구조이다.
