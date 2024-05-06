@@ -28,12 +28,14 @@
    * [벨만-포드 O(VE)](#벨만-포드-ove)
    * [플로이드-워셜 O(V^3)](#플로이드-워셜-ov3)
    * [최소 신장 트리(MST)](#최소-신장-트리-mst-minimum-spanning-tree)
-- [트리](#--)
+- [트리](#트리)
    * [코딩 테스트에서 트리 문제 유형](#코딩-테스트에서-트리-문제-유형)
    * [이진 트리](#이진-트리)
    * [트라이](#트라이)
    * [인덱스 트리 O(MlogN)](#인덱스-트리-omlogn)
    * [최소 공통 조상(LCA)](#최소-공통-조상-lca-lowest-common-ancestor)
+- [기하(CCW)](#기하)
+
 
 ---
 # 알고리즘
@@ -871,13 +873,61 @@ public class UnionFind {
     }
 }
 ```
-#### 그래프 내 사이클을 판별 = MST에서 활용
+### 그래프 내 사이클을 판별 = MST에서 활용
 이러한 유니온 파인드 연산으로 그래프의 사이클을 판별할 수 있다.
 union 연산은 그래프에서의 간선으로 표현될 수 있다. 따라서 간선을 하나씩 확인하면서 두 노드가 포함되어 있는 집합을 합치는 과정을 반복하는 것만으로도 그래프 내 '사이클'을 판별할 수 있다.
 1. 각 간선을 확인하며 두 노드의 대표 노드를 확인함
 2. 만약 서로의 parent가 다르면 두 노드에 대해 union 연산을 수행함
 3. 만약 parent가 같다면 사이클이 발생한 것임!
 4. 그래프에 포함되어 있는 모든 간선에 대해 위의 과정을 반복함
+
+### 변형된 유니온 파인드 : 집합의 개수와, 원소의 개수를 카운트
+변형된 유니온 파인드를 수행하면, 전체 집합이 몇 개 존재하는지 셀 수 있다. 
+또한 해당 집합에 포함되는 원소의 개수도 함께 셀 수 있다.
+
+1. 대표 노드를 -1로 초기화한다. 음수가 곧 대표(부모)노드를 의미함
+2. Find 수행 시, 배열의 값이 음수일 경우 대표노드로 리턴한다.
+3. Union 수행 시, 대표 노드의 배열 값에 새롭게 합쳐지는 집합의 개수를 음수값으로 더한다.
+
+```java
+public class UnionFind2 {
+    static int[] parents;
+    public static void main(String[] args) {
+        parents = new int[N];
+        for(int i = 0; i < N; i++){
+            parents[i] = -1;
+        }
+        
+        int a, b; //입력
+        Union(a, b);
+
+        int group = 0; // 집합의 수
+        int cnt = 0; // 원소의 개수 중 max
+        for(int i = 0; i < N; i++){
+            if(parents[i] < 0) {
+                group++; // 음수이면 대표 노드임
+                cnt = Math.min(cnt, parents[i]); //음수의 절댓값이 원소 개수
+            }
+        }
+        System.out.println(group);
+        System.out.println(-cnt);
+    }
+    
+    static void Union(int a, int b) {
+        int aRoot = Find(a);
+        int bRoot = Find(b);
+        if(aRoot != bRoot){
+            parents[aRoot] += parents[bRoot];
+            parents[bRoot] = aRoot;
+        }
+    }
+
+    static int Find(int x) {
+        if(parents[x] < 0) return x;
+        return parents[x] = Find(parents[x]);
+    }
+}
+```
 
 ## 위상정렬 O(V+E)
 사이클이 없고 방향이 있는 그래프일 때, 그래프를 선형으로 정렬한다.
@@ -1642,8 +1692,102 @@ public class LCA2 {
 ```
 
 ---
+# 기하
+## CCW(Counter-ClockWise)
+코딩 테스트에서의 기하 알고리즘은 모두 CCW(counter-clockwise)라는 기하학적 성질을 이용해 출 수 있다.
+CCW는 평면상의 3개의 점과 관련된 점들의 위치 관계를 판단하는 알고리즘이다.
+세 점을 `A(X1, Y1), B(X2, Y2), C(X3, Y3)`라고 가정했을 때 CCW의 공식은 다음과 같다.
+
+- `CCW = (X1Y2 + X2Y3 + X3Y1) - (X2Y1 + X3Y2 + X1Y3)`
+- `|CCW결괏값| / 2 = 세 점으로 이뤄진 삼각형의 넓이`
+
+### 공식 도출 과정
+1. 1번째 점을 뒤에 한 번 더 쓴다.
+2. 오른쪽 아래 방향 화살표 곱은 더하고, 왼쪽 아래 방향 화살표의 곱은 뺀다.
+```text
+X1 X2 X3 X1     X1 X2 X3 X1
+  \  \  \    -    /  /  /
+Y1 Y2 Y3 Y1     Y1 Y2 Y3 Y1
+```
+
+이렇게 세 점이 주어졌을 때 CCW 공식을 사요해 세 점에 관한 다양한 관계를 도출할 수 있다.
+CCW는 부호에 따라 다음과 같은 3가지 의미가 있다.
+- CCW 결과 < 0 : 세 점이 시계 방향으로 배치됨
+- CCW 결과 == 0 : 세 점이 일직선으로 배치됨
+- CCW 결과 > 0 : 세 점이 반시계 방향으로 배치됨
+그리고 부호와는 별개로 CCW 결과의 절댓값은 세 점의 벡터의 외적값을 나타내고,
+CCW의 절댓값을 절반으로 나누면 세 점으로 이뤄진 삼각형의 넓이를 나타낸다.
+또한, 보통 CCW를 계산하는 과정에서 곱셈으로 인해 오버플로우가 발생할 수 있다. 그래서 long 형으로 선언해야 한다.
+
+```java
+public class CCW {
+    public static void main(String[] args) {
+        int x1, y2, x2, y2, x3, y3;
+        int ccw = (x1*y2 + x2*y3 + x3*y1) - (x2*y1 + x3*y2 + x1*y3);
+        
+        if(ccw < 0) System.out.println("시계방향");
+        else if(ccw == 0) System.out.println("일직선");
+        else if(ccw > 0) System.out.println("반시계방향");
+    }
+}
+```
+세 점의 위치관계에 대해서 시계 방향과 반시계 방향으로 표현하는 것을 정리하면,
+어떤 직선 AB에 대해 마지막 점 C(X3, Y3)가 왼쪽에 있으면 시계 방향, 오른쪽에 있으면 반시계 방향이라고 정리할 수 있다.
+```text
+    A         A
+C   |    or   |   C
+    B         B
+(시계방향)  (반시계방향)
+```
+
+### 선분 AB와 CD의 교차 여부를 구하시오.
+```java
+public class CCW { // 선분의 교차여부
+    public static void main(String[] args) {
+        // A(x1, y1), B(x2, y2), C(x3, y3), D(x4, y4)
+        int ABC = CCW(x1, y1, x2, y2, x3, y3);
+        int ABD = CCW(x1, y1, x2, y2, x4, y4);
+        int CDA = CCW(x3, y3, x4, y4, x1, y1);
+        int CDB = CCW(x3, y3, x4, y4, x2, y2);
+
+        boolean cross = false;
+        if(ABC*ABD == 0 && CDA*CDB == 0) { // 일직선 상에서 만남
+            cross = isOverlab(AB, CD);
+        } else if(ABC*ABD <= 0 && CDA*CDB <= 0) { // 두 선분이 만남
+            cross = true;
+        }
+
+    }
+
+    static int CCW (long x1, long y1, long x2, long y2, long x3, long y3) {
+        long ccw = (x1*y2 + x2*y3 + x3*y1) - (x2*y1 + x3*y2 + x1*y3); // 곱셈 중 오버플로우 발생 -> long 형으로 선언
+        if(ccw < 0) return -1; // 왼쪽
+        else if(ccw > 0) return 1; // 오른쪽
+        else return 0;
+    }
+
+    public static boolean isOverlab(long x1, long y1, long x2, long y2, long x3, long y3, long x4, long y4) {
+        if(Math.min(x1, x2) <= Math.max(x3, x4) && Math.min(x3, x4) <= Math.max(x1, x2)
+        &&  Math.min(y1, y2) <= Math.max(y3, y4) && Math.min(y3,y4) <= Math.max(y1, y2)){
+            return true;
+        }
+        return false;
+    }
+}
+```
+
+### 원점과 다른 두 점 사이의 CCW 공식
+```text
+CCW = (X1Y2 + X2Y3 + X3Y1) - (X2Y1 + X3Y2 + X1Y3)
+    = (X1Y2 + 0 + 0) - (X2Y1 + 0 + 0)
+    = X1Y2 - X2Y1
+```
+원점과 다른 두 점 사이의 CCW로 다각형의 넓이를 구할 수 있다.
+- 원점과 다른 두 점이 반시계 방향이면 넓이가 양수로 나옴
+- 원점과 다른 두 점이 시계 방향이면 넓이가 음수로 나옴
 
 
+---
 
 
 
