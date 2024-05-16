@@ -293,7 +293,7 @@ public class Main {
         System.out.println(m.get(2)); // 10
 
         //전체 출력 : entrySet() 활용
-        for (Entry<Integer, Integer> entry: m.entrySet()) {
+        for (Map.Entry<Integer, Integer> entry: m.entrySet()) {
           System.out.println("key: " + entry.getKey() + ", value: " + entry.getValue());
         }
     }
