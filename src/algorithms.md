@@ -1008,6 +1008,10 @@ BFS 알고리즘을 기본으로 탐색하며 DP로 최단 경로를 업데이�
 PriorityQueue를 이용해 가장 적은 비용의 노드부터 탐색한다.
 시작노드부터 큐에 넣어 BFS 탐색을 하며, 새로운 최단 경로가 발생했을 때만 해당 노드를 큐에 추가한다.
 한번 방문한 노드는 새로운 최단 경로가 될 수 없다.
+- DP 배열 무한대로 초기화
+- visited 배열 선언
+- DP[start] = 0 으로 초기화
+- 조건에 맞는 노드를 큐에 추가
 ```
 
 1. 인접 리스트로 그래프 구현하고, 최단 거리 배열을 초기화함
@@ -1066,17 +1070,16 @@ public class Dijkstra {
         pq.add(new Node(s, 0));
 
         while(!pq.isEmpty()){
-            Node cur = pq.poll();
-            int now = cur.to;
-            int nowCost = cur.cost;
+            Node a = pq.poll();
+            int now = a.to;
 
             if(nowCost > DP[now]) continue;
             if(visited[now]) continue; // 이미 방문한 노드는 새로운 최단 경로가 될 수 없음
             visited[now] = true;
 
-            for(Node e : adj[now]){
-                int next = e.to;
-                int nextCost = DP[now] + e.cost;
+            for(Node b : adj[now]){
+                int next = b.to;
+                int nextCost = b.cost + a.cost;
                 if(DP[next] > nextCost){ // 새로운 최단 경로가 발생했을 때
                     DP[next] = nextCost; // 최단 거리 배열을 업데이트하고
                     pq.add(new Node(next, nextCost)); // 해당 경로를 큐에 추가함
