@@ -271,10 +271,10 @@ public class PrefixSumArray {
    2. 또는 첫 번째 값을 동시에 가리키면서 차례로 이동해나가기도 함
 2. 투 포인터 이동 원칙에 따라 배열의 끝까지 탐색함
    1. 예를 들어, 연속된 자연수의 합을 구할 때 투 포인터 이동 원칙은 아래와 같음
-   2. startIndex와 endIndex를 첫 번째 인덱스 값으로 초기화함, endIndex == N까지 탐색함
-   2. `sum > N : sum=sum-startIndex; startIndex++;`
-   3. `sum < N : endIndex++; sum=sum+endIndex;`
-   4. `sum == N : endIndex++; sum=sum+endIndex; count++;`
+   2. start와 end를 0으로 초기화함, end == N까지 탐색함
+   2. `sum > N : sum = sum - A[start]; start++;`
+   3. `sum < N : end++; sum = sum + A[end];`
+   4. `sum == N : end++; sum = sum + A[end]; count++;`
    5. 또는 두 데이터의 합을 구할 때 이동 원칙은 아래와 같음
    6. 투 포인터 i, j를 양쪽 끝에 위치시킨 후, i와 j가 만날 때까지 이동함
    6. `A[i] + A[j] > M; j--;'`
