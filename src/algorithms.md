@@ -35,6 +35,9 @@
    * [인덱스 트리 O(MlogN)](#인덱스-트리-omlogn)
    * [최소 공통 조상(LCA)](#최소-공통-조상-lca-lowest-common-ancestor)
 - [기하(CCW)](#기하)
+- [동적 계획법 DP](#DP)
+   * [최장 공통 부분 수열(LCS)](#lcs-longest-common-subsequence)
+   * [외판원 순회 (TSP)](#tsp-traveling-salesman-problem)
 
 ---
 # 알고리즘
@@ -73,10 +76,10 @@
 
 ## 알고리즘 문제풀이 기초
 - 히든케이스(Edge 검사) : 기본 테스트케이스 외에도 끝 값이나 시작 값으로 검사해보기
-- 모든 테스트 케이스를 통과했는데도 틀린다면, 자료형을 고려!(int를 long으로)
-- 20억이 넘어가면 자료형 long을 사용하자.
+- 모든 테스트 케이스를 통과했는데도 틀린다면, 자료형을 고려!(int 를 long 으로)
+- 20억이 넘어가면 자료형 long 을 사용하자.
 - 1억 연산은 1초를 의미한다. 즉, 만*만이 넘어가면 틀린거임
-- 자바는 실수를 double을 기본으로 사용한다.
+- 자바는 실수를 double 을 기본으로 사용한다.
 - int 배열은 1억건 이상 넘어가면 힘들다.
 - `연산 횟수 = 알고리즘 시간 복잡도 * 데이터의 크기`
 - 예를 들어, 시간제한이 2초(2억번 연산)일 때, 데이터가 1,000,000이라면 N*N은 사용할 수 없다.
@@ -104,15 +107,15 @@ public class Main {
     public static void main(String[] args) {
         String sNum = "1234";
         int i1 = Integer.parseInt(sNum); // 4 byte : -2,147,483,648 ~ 2,147,483,647
-        int i2 = Integer.valueOf(sNum);
+        //int i2 = Integer.valueOf(sNum);
         double d1 = Double.parseDouble(sNum);
-        double d2 = Double.valueOf(sNum);
+        //double d2 = Double.valueOf(sNum);
         float f1 = Float.parseFloat(sNum);
-        float f2 = Float.valueOf(sNum);
+        //float f2 = Float.valueOf(sNum);
         long l1 = Long.parseLong(sNum); // 8 byte
-        long l2 = Long.valueOf(sNum);
+        //long l2 = Long.valueOf(sNum);
         short s1 = Short.parseShort(sNum);
-        short s2 = Short.valueOf(sNum);
+        //short s2 = Short.valueOf(sNum);
         char c1 = sNum.charAt(0);
 
         int i3 = 1234;
@@ -128,13 +131,13 @@ public class Main {
 # 정렬
 ## 정렬의 응용
 1. 유일성 검사/ 중복 제거
-   - Set도 같은 역할을 함 = treeSet(정렬이 되는 Set)
+   - Set 도 같은 역할을 함 = treeSet(정렬이 되는 Set)
 2. 빈도 구하기(logN)
    - lower bound ~ upper bound
 3. 합집합/교집합 구하기
    - 2 pointers 알고리즘을 이용
 4. 이분 탐색(log N) = priority queue
-   1. Array.binarySearch를 사용
+   1. Array.binarySearch 를 사용
    2. N이 10만대이면 NlogN 알고리즘을 사용
 
 ## 라이브러리를 이용한 정렬
@@ -338,7 +341,8 @@ import java.util.Deque;
 public class Main {
     public static void main(String[] args) {
         Deque<Integer> deque = new ArrayDeque<>();
-
+        
+        deque.add(0);
         deque.addFirst(1);
         deque.removeFirst();
         deque.addLast(2);
@@ -346,16 +350,16 @@ public class Main {
         deque.pollFirst();
         deque.pollLast();
         deque.getFirst();
-        deque.getLast();
-        deque.peekFirst();
-        deque.peekLast();
+        int a = deque.getLast();
+        int b = deque.peekFirst();
+        int c = deque.peekLast();
     }
 }
 ```
 
 ## Lower & Upper Bound O(logN)
-lower bound는 하한선, upper bound는 상한선을 의미한다.
-이 때 upper bound는 타겟보다 처음으로 큰 수를 가리킨다.
+lower bound 는 하한선, upper bound 는 상한선을 의미한다.
+이 때 upper bound 는 타겟보다 처음으로 큰 수를 가리킨다.
 이진 탐색으로 원하는 타겟의 범위 인덱스를 구한다.
 
 - 빈도 구하기
@@ -418,7 +422,7 @@ DFS는 재귀함수 또는 스택 자료구조로 구현한다. 즉 DFS는 재�
 - 사이클 찾기
 
 ```java
-public class DFS {
+public class Main {
    static ArrayList<Integer>[] adj; // 그래프 인접리스트
    static boolean[] visited;
    
@@ -446,7 +450,7 @@ public class DFS {
 - 위상 정렬
 
 ```java
-public class BFS {
+public class Main {
    static ArrayList<Integer>[] adj; // 그래프 인접리스트
    static boolean[] visited;
    
@@ -495,7 +499,7 @@ public class BinarySearch {
     }
 
     static void binarySearch(int[] array, int target) {
-        int low = 0, high = array.length-1, mid = 0;
+        int low = 0, high = array.length-1, mid;
 
         while(low <= high) {
             mid = (low + high)/2; //pivot 잡기
@@ -729,7 +733,8 @@ public class EEA {
     public static long[] Excute(long a, long b){ // 유클리드 호제법
         long[] ret = new long[2];
         if(b==0) {
-            ret[0] = 1; ret[1] = 0; // x=1, y=0으로 설정하고 리턴하기
+            ret[0] = 1; 
+            ret[1] = 0; // x=1, y=0으로 설정하고 리턴하기
             return ret;
         }
 
@@ -1243,7 +1248,7 @@ S, E, K라는 변수로 그래프의 경로를 나누어 생각하는 점화식�
 ### 크루스칼 O(ElogV)
 가중치가 가장 작은 에지부터 먼저 연결해서 최소 신장 트리를 구성한다. 이 때 유니온 파인드 기법으로 사이클 여부를 검사한다.
 
-1. 에지 리스트로 그래프를 구현하고 유니온 파인드 배열을 초기화함
+1. 우선순위 큐 에지 리스트로 그래프를 구현하고 유니온 파인드 배열을 초기화함
    1. 노드 변수 2개와 가중치 변수를 가지는 `A[N][3]`형태의 `ArrayList<edge> edges`를 선언함
    2. 사이클 처리를 위한 유니온 파인트 배열을 자기 자신의 인덱스 값으로 초기화함
 2. 그래프 데이터를 가중치를 기준으로 정렬함
@@ -1257,10 +1262,12 @@ S, E, K라는 변수로 그래프의 경로를 나누어 생각하는 점화식�
 
 ```java
 public class MST {
-    static PriorityQueue<Edge> edges; // 에지 리스트
+    static int[] parent; // 유니온 파인드 배열
+    static PriorityQueue<Edge> edges; // PQ 에지 리스트
     static class Edge implements Comparable<Edge> {
-        int from, to, cost;
-        public Edge(int from, int to, int cost) {
+        int from, to;
+        long cost;
+        public Edge(int from, int to, long cost) {
             this.from = from;
             this.to = to;
             this.cost = cost;
@@ -1268,36 +1275,32 @@ public class MST {
 
         @Override
         public int compareTo(Edge o) {
-            return this.cost - o.cost;
+            return (int)(this.cost - o.cost);
         }
     }
-    static int[] parent; // 유니온 파인드 배열
-
     public static void main(String[] args) {
-        // 우선순위 큐로 에지 리스트를 구성함으로써 오름차순 정렬을 수행함
-        edges = new PriorityQueue<>();
-        
-        // 유니온 파인드 배열을 자기 자신의 인덱스 값으로 초기화
-        parent = new int[V+1];
-        for (int i = 1; i <= V; i++) {
+        // 유니온 파인드 배열 초기화
+        parent = new int[N+1];
+        for (int i = 1; i <= N; i++) {
             parent[i] = i;
         }
         
-        // 그래프 저장
-        for (int i = 0; i < E; i++) {
+        // 우선순위 큐로 에지 리스트를 구성함으로써 오름차순 정렬을 수행하며 그래프 저장
+        edges = new PriorityQueue<>();
+        for (int i = 0; i < M; i++) {
             edges.add(new Edge(a, b, c));
         }
         
         // 크루스칼 알고리즘
         int usedEdge = 0;
-        int result = 0;
-        while(usedEdge < V-1){ // 에지의 개수가 N-1이 될 때까지 반복
+        long result = 0;
+        while(usedEdge < N-1){ // 에지의 개수가 N-1이 될 때까지 반복
             Edge e = edges.poll(); // 가장 작은 가중치의 에지를 선택
             int now = e.from;
             int next = e.to;
             if(Find(now) != Find(next)){ // 사이클 여부 판별
                 Union(now, next);
-                result = result + e.cost;
+                result += e.cost;
                 usedEdge++;
             }
         }
@@ -1521,13 +1524,10 @@ public class IndexTree {
 
         // 리프노드의 값을 바꾸고
         tree[treeIndex] = value;
-        // 부모노드로 간다
-        treeIndex /= 2;
 
         // 부모노드->루트노드까지 값을 update 한다.
-        while(treeIndex > 0){
-            tree[treeIndex] = tree[treeIndex*2] + tree[(treeIndex*2)+1];
-            treeIndex /= 2;
+        for(int i = treeIndex/2; i > 0; i /= 2) {
+            tree[i] = tree[i*2] + tree[(i*2)+1];
         }
     }
 }
@@ -1788,7 +1788,7 @@ public class CCW { // 선분의 교차여부
 
         boolean cross = false;
         if(ABC*ABD == 0 && CDA*CDB == 0) { // 일직선 상에서 만남
-            cross = isOverlab(AB, CD);
+            cross = isOverlap(AB, CD);
         } else if(ABC*ABD <= 0 && CDA*CDB <= 0) { // 두 선분이 만남
             cross = true;
         }
@@ -1802,7 +1802,7 @@ public class CCW { // 선분의 교차여부
         else return 0;
     }
 
-    public static boolean isOverlab(long x1, long y1, long x2, long y2, long x3, long y3, long x4, long y4) {
+    public static boolean isOverlap(long x1, long y1, long x2, long y2, long x3, long y3, long x4, long y4) {
         if(Math.min(x1, x2) <= Math.max(x3, x4) && Math.min(x3, x4) <= Math.max(x1, x2)
         &&  Math.min(y1, y2) <= Math.max(y3, y4) && Math.min(y3,y4) <= Math.max(y1, y2)){
             return true;
@@ -1818,17 +1818,151 @@ CCW = (X1Y2 + X2Y3 + X3Y1) - (X2Y1 + X3Y2 + X1Y3)
     = (X1Y2 + 0 + 0) - (X2Y1 + 0 + 0)
     = X1Y2 - X2Y1
 ```
-원점과 다른 두 점 사이의 CCW로 다각형의 넓이를 구할 수 있다.
+원점과 다른 두 점 사이의 CCW 로 다각형의 넓이를 구할 수 있다.
 - 원점과 다른 두 점이 반시계 방향이면 넓이가 양수로 나옴
 - 원점과 다른 두 점이 시계 방향이면 넓이가 음수로 나옴
 
 
 ---
+# DP
+## LCS (Longest Common Subsequence)
+최장 공통 부분 수열 찾기 문제는 문자열을 이용한 대표적인 동적 계획법 문제이다.
+예를 들어, ACAYKP와 CAPCAK의 LCS는 ACAK가 된다.
+이러한 종류의 문제는 각 문자열을 축으로 하는 2차원 DP 배열을 생성하여 해결할 수 있다.
+DP 배열에 저장하는 값은 각 위치 인덱스를 마지막 문자로 하는 두 문자열의 최장 공통 수열의 길이이다.
 
+```text
+  A C A Y K P
+C 0 1 1 1 1 1
+A 1 1 2 2 2 2
+P 1 1 2 2 2 3
+C 1 2 2 2 2 3
+A 1 2 3 3 3 3
+K 1 2 3 3 4 4
+```
 
+LCS 점화식은 다음과 같다. 
+1. 특정 자리가 가리키는 행과 열의 문자열 값을 비교해 값이 같으면 배열의 대각선 왼쪽 위의 값에 1을 더한 값을 저장한다.
+    - `DP[i][j] = DP[i-1][j-1] + 1`
+2. 비교한 값이 다르면 배열의 왼쪽의 값과 위의 값 중 큰 값을 선택해 저장한다.
+   - `DP[i][j] = Math.max(DP[i-1][j], DP[i][j-1]`
+3. LCS 정답을 출력한다. DP의 마지막 값이 곧 LCS 의 길이이다.
+   1. LCS 문자열을 출력하기 위해서는 먼저 마지막부터 탐색을 수행한다.
+   2. 해당 자리가 가리키는 행과 열의 문자열 값을 비교해 값이 같으면 문자를 LCS 에 기록하고, 왼쪽 대각선으로 이동한다.
+   3. 비교한 값이 다르면 배열의 왼쪽 값과 위의 값 중 큰 값으로 이동한다.
 
+문자열과 관련된 동적 계획법은 이와 비슷하게 풀이할 수 있는 경우가 많기 때문에 문제를 꼼꼼히 숙지하고, 실제 코드로 연습해야 한다.
 
+```java
+public class LCS {
+    static long[][] DP;
+    static ArrayList<Character> Path; // LCS를 저장할 리스트
+    static char[] A, B; // 주어진 문자열 배열
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        A = br.readLine().toCharArray();
+        B = br.readLine().toCharArray();
 
+        DP = new long[A.length+1][B.length+1];
+        Path = new ArrayList<Character>();
+        for (int i = 1; i <= A.length; i++) {
+            for (int j = 1; j <= B.length; j++) {
+                if(A[i-1] == B[j-1]) { // 같은 문자일 때 왼쪽 대각선값 +1
+                    DP[i][j] = DP[i-1][j-1] + 1;
+                } else { // 다르면 왼쪽과 위의 값 중 큰 수
+                    DP[i][j] = Math.max(DP[i-1][j], DP[i][j-1]);
+                }
+            }
+        }
+
+        System.out.println(DP[A.length][B.length]); // LCS 길이
+        getText(A.length, B.length);
+        for(int i = Path.size()-1; i >= 0; i--) {
+            System.out.print(Path.get(i));
+        }
+    }
+
+    static void getText(int row, int column) {
+        if(row == 0 | column == 0) return; // 재귀함수 방식의 구현
+        if(A[row-1] == B[column-1]) { // 문자가 같으면 Path에 기록하고, 왼쪽 대각선으로 이동
+            Path.add(A[row-1]);
+            getText(row-1, column-1);
+        } else { // 문자가 다르면 왼쪽 값과 위의 값 중 큰 값으로 이동
+            if(DP[row-1][column] > DP[row][column-1]) {
+                getText(row-1, column);
+            } else {
+                getText(row, column-1);
+            }
+        }
+    }
+}
+```
+
+## TSP (Traveling Salesman Problem)
+외판원 순회 문제는 영어로 TSP라고 불리며 컴퓨터 과학 분야에서 가장 중요하게 취급되는 문제 중 하나이다.
+다양한 응용 문제가 있지만, 가장 일반적인 형태의 문제는 다음과 같다.
+
+- 점화식 `D[c][v]` : 현재 도시가 c, 현재까지 방문한 모든 도시 리스트가 v일 때 앞으로 남은 모든 도시를 경유하는 데 필요한 최소 비용
+
+이 문제는 비트 마스킹 기법으로 방문 도시 리스트인 v를 표현한다.
+예를 들어 총 도시가 4개일 때 방문 도시를 이진수로 표현하면 다음과 같다.
+- 방문 도시는 이진수의 각 자릿수로 표현하고, 방문 시 1, 미방문 시 0의 값으로 저장함
+- 4번, 1번 도시 방문 = 1001 = `D[i][9]`
+- 3번, 2번 도시 방문 = 110 = `D[i][6]`
+- 4번, 3번, 2번, 1번 도시 방문 = 1111 = `D[i][15]`
+
+마스킹된 비트를 기준으로 문제에서 필요한 조건을 검사하는 식은 아래와 같다.
+1. 모든 도시 순회 판단 연산식 : if(v == (1 << N) - 1)
+   예를 들어, 도시가 4개인 경우 (1 << 4) - 1 = 16 - 1 = 15이고, v가 15라면 모든 도시를 방문한 것임
+
+2. 방문 도시 확인 연산식 : if((v & (1 << i)) == 0)
+   예를 들어, i=3(4번째도시)인 경우 1 << 3 = 8 = 1000이고, v & 1000 연산을 수행했을 때 결과값이 0이면 4번 도시를 방문하지 않았다고 판단할 수 있음
+   즉 v의 이진수 표현 시 4번째 자리가 1인 경우가 아니면 0을 리턴하며 4번째 도시를 방문하지 않았다고 판단함
+
+3. 방문 도시 저장 연산식 : v | (1 << i)
+   예를 들어, i=2(3번째도시)인 경우 1 << 2 = 100이고, v | 100 연산을 수행하면 
+   v의 이진수 표현 시 3번째 자리를 1로 저장하게 되어, 3번째 도시에 방문하였다는 사실을 저장하게 됨
+     
+
+```java
+// 비트 마스킹 기법
+public class Main_2098_외판원의순회경로 {
+    static int[][] W, d;
+    static int N;
+    static final int INF = 1000000 * 16 +1; // Integer.MAX_VALUE 를 할 경우 에러가 발생
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        N = Integer.parseInt(br.readLine().trim());
+        W = new int[16][16];
+        d = new int[16][1 << 16];
+
+        for(int i = 0; i < N; i++){
+            StringTokenizer st = new StringTokenizer(br.readLine().trim());
+            for(int j = 0; j < N; j++){
+                W[i][j] = Integer.parseInt(st.nextToken());
+            }
+        }
+        System.out.println(tsp(0, 1));
+    }
+
+    static int tsp(int c, int v){ // c는 현재 도시, v는 현재까지 방문한 도시의 리스트를 이진수로 표현함
+        if(v == (1 << N) - 1) { // 모든 노드를 방문했을 때
+            return W[c][0] == 0 ? INF : W[c][0];
+        }
+        if(d[c][v] != 0){ // 이미 방문한 노드일 때
+            return d[c][v];
+        }
+        int min = INF;
+        for(int i = 0; i < N; i++){
+            if((v & (1 << i)) == 0 && W[c][i] != 0){ // 방문한 적이 없고, 갈 수 있는 도시일 때
+                min = Math.min(min, tsp(i, (v | (1 << i))) + W[c][i]);
+            }
+        }
+
+        return d[c][v] = min;
+    }
+}
+```
 
 
 
