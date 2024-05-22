@@ -174,7 +174,5 @@ public class 강수량_2094 {
 
         tree = new int[leafCount * 2];
         leafPointer = leafCount;
-
-
     }
 }

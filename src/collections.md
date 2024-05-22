@@ -402,9 +402,13 @@ TreeMap<K, V> name = new TreeMap<>();
 1. m.put(K, V) : TreeMap에 쌍(K, V)를 추가
 2. m.remove(K) : 현재 TreeMap에 들어있는 데이터 중 key가 K인 쌍을 찾아 제거
 3. m.get(K) : 현재 TreeMap에 key가 K인 쌍을 찾아 값 V를 반환
+4. m.lastKey() : key를 기준으로 오름차순 정렬되므로, 최댓값을 반환
+5. m.firstKey() : 최솟값을 반환
 
 만약 해당하는 쌍이 없다면 에러가 발생하기 때문에 미리 `m.containsKey(K)`를 확인하여 true인 경우에만 get(K)을 사용한다.
 또는 `m.getOrDefault(K, D)` 함수를 사용하면 K에 해당하는 key가 없을 시에는 값 D를 기본으로 반환해준다.
+TreeMap은 key를 기준으로 오름차순 정렬한다. 그래서 중복된 key 값이 들어올 경우 Set처럼 하나의 값만을 유지한다.
+입력으로 중복된 값이 주어질 경우, value에 들어오는 값의 count를 핸들링해서 문제를 해결할 수 있다.(백준 7662_이중 우선순위 큐 문제 참고)
 ```java
 import java.util.TreeMap;
 
@@ -414,11 +418,16 @@ public class Main {
 
         m.put(5, 6); // m.put(K, V);
         m.put(2, 2);
+        m.put(2, 3); // key값이 2인 entry의 value를 3으로 바꿈 (중복허용안함)
         m.put(10, 1);
   
         if(m.containsKey(2)) System.out.println(m.get(2)); // m.get(K);
   
         m.remove(5);
+
+        //map.put(a, map.getOrDefault(a, 0) + 1); // value에 중복된 값을 cnt
+        int b = m.lastKey(); // 최댓값
+        int c = m.firstKey(); // 최솟값
   
         if(!m.containsKey(5)) System.out.println("not exists!");
   
@@ -452,6 +461,11 @@ public class Main {
         // key 기준 오름차순으로 순회하게 되므로 (2,2) (5,6) (10,1) 순으로 출력됨
         while (iterator.hasNext()) {
           Entry<Integer, Integer> entry = iterator.next();
+          System.out.println(entry.getKey()+" "+entry.getValue());
+        }
+        
+        //또는 간단하게
+        for(Entry<Integer, Integer> entry : m.entrySet()){
           System.out.println(entry.getKey()+" "+entry.getValue());
         }
     }
@@ -606,6 +620,7 @@ public class Main {
         System.out.println(s.last()); // 9
         
         s.remove(9);
+        s.remove(s.last());
         if(s.contains(9)) System.out.println("not exists!");
     }
 }

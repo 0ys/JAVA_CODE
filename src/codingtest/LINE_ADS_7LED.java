@@ -15,7 +15,7 @@ E   C
   D
 
 0 = A, B, C, D, E, F
-1 = B, c
+1 = B, C
 2 = A, B, D, E, G
 ...
 
