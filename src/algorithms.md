@@ -38,6 +38,7 @@
 - [동적 계획법 DP](#DP)
    * [최장 공통 부분 수열(LCS)](#lcs-longest-common-subsequence)
    * [외판원 순회 (TSP)](#tsp-traveling-salesman-problem)
+   * [배낭 문제(Knapsack)](#knapsack)
 
 ---
 # 알고리즘
@@ -1964,6 +1965,100 @@ public class Main_2098_외판원의순회경로 {
 }
 ```
 
+## Knapsack
+배낭 문제는 조합 최적화 문제의 일종이다. 
+담을 수 있는 최대 무게(K)가 정해진 배낭과 함께 물건 각각의 무게(W)와 가치(V)가 주어진다.
+이 때, 배낭에 담은 아이템들의 가치의 합이 최대가 되도록 하는 물건들의 부분집합을 찾는 문제이다.
+
+배낭 문제는 크게 두 가지 문제로 분류될 수 있다.
+1. 분할 가능한 배낭 문제 (Fraction Knapsack Problem)
+   - 물건을 쪼개서 담을 수 있다.
+   - 그리디 알고리즘으로 가치가 가장 큰 물건부터 담는다.
+2. 0/1 배낭 문제 (0/1 Knapsack Problem)
+   - 그리디로는 최적해를 찾을 수 없다.
+   - 동적 계획법, 백트래킹 등의 조합 최적화 문제 풀이 방법으로 해결한다.
+
+백준 12865_평범한 배낭 문제는 0/1 배낭 문제로 풀이는 아래와 같다.
+예를 들어, K=7인 배낭이 주어졌을 때 각각의 물건의 무게와 가치 (W, V)가 아래와 같다.
+- (6, 13), (4, 8), (3, 6), (5, 12)
+
+이를 2차원 DP로 구성하면, 0~7까지 배낭의 크기와 i번째 물건에 대해 아래와 같이 DP를 업데이트할 수 있다.
+```text
+           i/j 0  1  2  3  4  5  6  7
+  (6, 13) = 1  0  0  0  0  0  0  13 13
+  (4,  8) = 2  0  0  0  0  8  8  13 13
+  (3,  6) = 3  0  0  0  6  8  8  13 14
+  (5, 12) = 4  0  0  0  6  8  12 13 14
+```
+- i가 1이고 j가 6일 때(=가방 무게가 6일 때), 무게가 6인 1번째 물건을 담을 수 있다 `= 13`
+- i가 2이고 j가 4일 때, 무게가 4인 2번째 물건을 담을 수 있다 `= 8`
+- i가 3이고 j가 4일 때, 최대 가치는 무게가 4인 2번째 물건을 담는 것이다 `= 8`
+- i가 3이고 j가 7일 때, 최대 가치는 8 + 6으로 2, 3번째 물건을 담는 것이다. `= 14`
+- i가 4이고 j가 3일 때, 최대 가치는 무게가 3인 3번째 물건을 담는 것이다 `= 6 (누적)`
+```java
+// Knapsack 문제
+public class Main_12865_평범한배낭 {
+    static int N, K;
+    static int[] W, V;
+    static int[][] DP1;
+    static int[] DP2;
+    public static void main(String[] args) {
+        W = new int[N+1];
+        V = new int[N+1];
+        DP1 = new int[N+1][K+1];
+        DP2 = new int[K+1];
+        for(int i = 1; i <= N; i++){
+            st = new StringTokenizer(br.readLine());
+            W[i] = Integer.parseInt(st.nextToken());
+            V[i] = Integer.parseInt(st.nextToken());
+        }
+        
+        // Bottom Up 방식 구현 1 : 2차원 배열 이용 (192ms / 53,768KB)
+        for(int i = 1; i <= N; i++){
+            for(int j = 1; j <= K; j++){
+                // i번째 무게를 더 담을 수 없는 경우
+                if(W[i] > j) {
+                    DP1[i][j] = DP1[i-1][j];
+                }
+                // i번째 무게를 더 담을 수 있는 경우
+                else {
+                    DP1[i][j] = Math.max(DP1[i-1][j], DP1[i-1][j-W[i]] + V[i]);
+                }
+            }
+        }
+
+        // Bottom Up 방식 구현 2 : 1차원 배열 이용 (180ms / 14,728KB)
+        for(int i = 1; i <= N; i++){
+            for(int j = K; j - W[i] >= 0; j--){
+                // K부터 탐색하여 담을 수 있는 무게 한계치가 넘지 않을 때까지 반복
+                DP2[j] = Math.max(DP2[j], DP2[j-W[i]] + V[i]);
+            }
+        }
+
+        System.out.println(DP1[N][K]);
+        System.out.println(DP2[K]);
+        System.out.println(knapsack(N, K));
+
+    }
+    static int knapsack(int i, int k){ // Top Down 방식 구현 (248ms / 55,088KB)
+        if(i < 0) return 0; // i가 0 미만, 즉 범위 밖이 되면 리턴
+
+        if(DP1[i][k] == 0){ // 탐색하지 않은 위치라면?
+            // 현재 물건(i)을 추가로 못 담는 경우 (이전 i 값 탐색)
+            if(W[i] > k){
+                DP1[i][k] = knapsack(i - 1, k);
+            }
+            // 현재 물건(i)을 담을 수 있는 경우
+            else if (W[i] <= k){
+                // 이전 i값과 이전 i값에 대한 k-W[i]의 값 + 현재 가치(V[i]) 중 큰 값을 저장
+                DP1[i][k] = Math.max(knapsack(i - 1, k), knapsack(i - 1, k - W[i]) + V[i]);
+            }
+        }
+
+        return DP1[i][k];
+    }
+}
+```
 
 
 
