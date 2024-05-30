@@ -24,7 +24,7 @@
    * [그래프의 표현](#그래프의-표현)
    * [유니온파인드](#유니온파인드)
    * [위상정렬 O(V+E)](#위상정렬-ove)
-   * [다익스트라 O(ElogV)](#다익스트라-oelogv)
+   * [다익스트라 O(E logV)](#다익스트라-oe-logv)
    * [벨만-포드 O(VE)](#벨만-포드-ove)
    * [플로이드-워셜 O(V^3)](#플로이드-워셜-ov3)
    * [최소 신장 트리(MST)](#최소-신장-트리-mst-minimum-spanning-tree)
@@ -32,7 +32,7 @@
    * [코딩 테스트에서 트리 문제 유형](#코딩-테스트에서-트리-문제-유형)
    * [이진 트리](#이진-트리)
    * [트라이](#트라이)
-   * [인덱스 트리 O(MlogN)](#인덱스-트리-omlogn)
+   * [인덱스 트리 O(M logN)](#인덱스-트리-om-logn)
    * [최소 공통 조상(LCA)](#최소-공통-조상-lca-lowest-common-ancestor)
 - [기하(CCW)](#기하)
 - [동적 계획법 DP](#DP)
@@ -62,17 +62,17 @@
 |           | 파스칼의 삼각형          |          |               |                |
 
 
-|       구분        | 알고리즘                    | 확장 알고리즘           | 시간복잡도 | 구현유형      | 사용기법              | 간선방향        |
-|:---------------:|-------------------------|-------------------| ---------- |-----------| --------------------- | --------------- |
-|       트리        | LCA<br>(공통조상찾기)         |                   | NlogN      | List      |                       |                 |
-|                 | 인덱스트리<br>(Segment Tree) | 펙웍트리(BIT)<br>Lazy Propagation | NlogN      | 배열        | 이진탐색              |                 |
-|  그래프 <br>최단경로   | 다익스트라                   |                   | ElogV      | 인접 리스트    | 우선순위큐            | 방향,<br>무방향 |
-|                 | 벨만포드                    |                   | VE         | 에지 리스트    | 완전탐색<br>음수가능  | 방향,<br>무방향 |
-|                 | 플로이드-워셜                 |                   | V^3        | 인접 행렬     | 완전탐색<br>음수가능  | 방향,<br>무방향 |
-| 최소신장<br>트리(MST) | 크루스칼 Kruscal            |                   | ElogV      | PQ 에지 리스트 | 탐욕법,<br>UnionFind  | 무방향          |
-|                 | 프림 Prim                 |                   | V^2        | List, 배열  | 탐욕법,<br>우선순위큐 | 무방향          |
-|       그래프       | 위상정렬                    |                   | V+E        | List, 배열  | DAG                   | 방향            |
-|                 | 단절점, 단절선                | 강한 연결 요소<br>- 타잔, 코사라주 | V+E        | List, 배열  |                       | 무방향          |
+|       구분        | 알고리즘                    | 확장 알고리즘           | 시간복잡도  | 구현유형      | 사용기법              | 간선방향        |
+|:---------------:|-------------------------|-------------------|--------|-----------| --------------------- | --------------- |
+|       트리        | LCA<br>(공통조상찾기)         |                   | NlogN  | List      |                       |                 |
+|                 | 인덱스트리<br>(Segment Tree) | 펙웍트리(BIT)<br>Lazy Propagation | NlogN  | 배열        | 이진탐색              |                 |
+|  그래프 <br>최단경로   | 다익스트라                   |                   | E logV | 인접 리스트    | 우선순위큐            | 방향,<br>무방향 |
+|                 | 벨만포드                    |                   | VE     | 에지 리스트    | 완전탐색<br>음수가능  | 방향,<br>무방향 |
+|                 | 플로이드-워셜                 |                   | V^3    | 인접 행렬     | 완전탐색<br>음수가능  | 방향,<br>무방향 |
+| 최소신장<br>트리(MST) | 크루스칼             |                   | E logV | PQ 에지 리스트 | 탐욕법,<br>UnionFind  | 무방향          |
+|                 | 프림                  |                   | V^2    | List, 배열  | 탐욕법,<br>우선순위큐 | 무방향          |
+|       그래프       | 위상정렬                    |                   | V+E    | List, 배열  | DAG                   | 방향            |
+|                 | 단절점, 단절선                | 강한 연결 요소<br>- 타잔, 코사라주 | V+E    | List, 배열  |                       | 무방향          |
 
 
 ## 알고리즘 문제풀이 기초
@@ -192,7 +192,7 @@ public class DivideAndConquer {
         int index1 = s;
         int index2 = m+1;
         // 두 그룹을 병합하는 로직 : Conquer
-        // 양쪽 그룹의 index가 가리키는 값을 비교해 더 작은 수를 배열에 저장하고,
+        // 양쪽 그룹의 index 가 가리키는 값을 비교해 더 작은 수를 배열에 저장하고,
         // 선택된 데이터의 index 값을 오른쪽으로 한 칸 이동하기
         while(index1<=m && index2<=e){
             if(tmp[index1] > tmp[index2]){
@@ -274,19 +274,19 @@ public class PrefixSumArray {
 - 두 가지 배열의 교집합을 비교
 
 1. 시작 인덱스와 종료 인덱스를 투 포인터로 지정함
-   1. 보통 정렬된 데이터에 대해 양쪽 끝 값으로 지정하고 탐색하거나
-   2. 또는 첫 번째 값을 동시에 가리키면서 차례로 이동해나가기도 함
+   - 보통 정렬된 데이터에 대해 양쪽 끝 값으로 지정하고 탐색하거나 (아래 2번 예시)
+   - 또는 첫 번째 값을 동시에 가리키면서 차례로 이동해나가기도 함 (아래 1번 예시)
 2. 투 포인터 이동 원칙에 따라 배열의 끝까지 탐색함
    1. 예를 들어, 연속된 자연수의 합을 구할 때 투 포인터 이동 원칙은 아래와 같음
-   2. start와 end를 0으로 초기화함, end == N까지 탐색함
-   2. `sum > N : sum = sum - A[start]; start++;`
-   3. `sum < N : end++; sum = sum + A[end];`
-   4. `sum == N : end++; sum = sum + A[end]; count++;`
-   5. 또는 두 데이터의 합을 구할 때 이동 원칙은 아래와 같음
-   6. 투 포인터 i, j를 양쪽 끝에 위치시킨 후, i와 j가 만날 때까지 이동함
-   6. `A[i] + A[j] > M; j--;'`
-   7. `A[i] + A[j] < M; i++;`
-   8. `A[i] + A[j] == M; i++; j--; count++;`
+      - start 와 end 를 0으로 초기화함, end == N까지 탐색함
+      - `sum > N : sum = sum - A[start]; start++;`
+      - `sum < N : end++; sum = sum + A[end];`
+      - `sum == N : end++; sum = sum + A[end]; count++;`
+   2. 또는 두 데이터의 합을 구할 때 이동 원칙은 아래와 같음
+      - 투 포인터 i, j를 양쪽 끝에 위치시킨 후, i와 j가 만날 때까지 이동함
+      - `A[i] + A[j] > M; j--;'`
+      - `A[i] + A[j] < M; i++;`
+      - `A[i] + A[j] == M; i++; j--; count++;`
 
 ```java
 public class TwoPointers {
@@ -319,12 +319,12 @@ public class TwoPointers {
 ```
 
 ## 슬라이딩 윈도우 O(N)
-슬라이딩 윈도우 알고리즘은 2개의 포인터로 범위(window)를 지정한 다음, window를 유지한 채로 이동(sliding)하여 문제를 해결한다.
+슬라이딩 윈도우 알고리즘은 2개의 포인터로 범위(window)를 지정한 다음, window 를 유지한 채로 이동(sliding)하여 문제를 해결한다.
 
  - 슬라이딩 윈도우인 부분 배열 P와 문제의 조건을 체크하는 상태 배열을 선언하여 윈도우가 이동할 때마다 상태 배열을 업데이트함
    - 현재 상태 배열을 업데이트할 때는 빠지는 데이터와 신규 데이터만 보고 업데이트하기 때문에 O(N)의 시간 복잡도를 가짐
    - ADD()와 REMOVE() 함수를 각각 조건에 맞게 구현할 수 있음
- - 데이터가 너무 커서 NlogN의 정렬을 사용할 수 없는 경우, 슬라이딩 윈도우를 deque로 구현하여 정렬 효과를 볼 수 있음
+ - 데이터가 너무 커서 NlogN의 정렬을 사용할 수 없는 경우, 슬라이딩 윈도우를 deque 로 구현하여 정렬 효과를 볼 수 있음
    - 예를 들어, 일정 범위 안의 최솟값을 찾는 문제에서 덱에 (인덱스, 숫자) 형태의 새 노드를 저장할 때,
    - 덱의 뒤에서부터 비교하여 저장된 노드의 숫자가 크면 removeLast() 하고 숫자가 작으면 addLast() 함
    - 이렇게 하면 덱에는 노드가 오름차순으로 정렬됨
@@ -332,7 +332,7 @@ public class TwoPointers {
 
 ### Deque
 덱은 양 끝에서 데이터를 삽입하거나 삭제할 수 있는 자료구조이다.
-LinkedList와 ArrayDeque 모두로 구현할 수 있는데, ArrayDeque가 좀 더 유리하다.
+LinkedList 와 ArrayDeque 모두로 구현할 수 있는데, ArrayDeque 가 좀 더 유리하다.
 ArrayDeque 공식문서에 보면 스택구조로 사용하면 Stack 클래스보다 빠르고, 큐 구조로 사용하면 Queue 클래스보다 빠르다.
 
 - addFirst(), removeFirst()
@@ -375,8 +375,8 @@ public class LowerUpperBound {
     public static void main(String[] args) {
         // 중복값이 있을 경우 먼저 찾은 값의 인덱스를 반환
         System.out.println("# API index:" + Arrays.binarySearch(input, 2));
-        System.out.println("# lowerbound index:" + lowerBound(2)); // 1
-        System.out.println("# upperbound index:" + upperBound(2)); // 4
+        System.out.println("# lower bound index:" + lowerBound(2)); // 1
+        System.out.println("# upper bound index:" + upperBound(2)); // 4
     }
 
     static int lowerBound(int target){
@@ -417,7 +417,7 @@ public class LowerUpperBound {
 그래프 완전 탐색 기법 중 하나이다.
 깊이 우선 탐색은 그래프의 시작 노드부터 시작하여 탐색 분기의 최대 깊이까지 탐색을 마친 후 다른 쪽 분기로 이동하여 다시 탐색을 수행한다.
 시간 복잡도는 O(V+E)로 V는 노드의 개수, E는 엣지의 개수를 의미한다.
-DFS는 재귀함수 또는 스택 자료구조로 구현한다. 즉 DFS는 재귀 함수 그 자체로 생각할 수 있다.
+DFS 는 재귀함수 또는 스택 자료구조로 구현한다. 즉 DFS 는 재귀 함수 그 자체로 생각할 수 있다.
 #### 응용 문제
 - 백트래킹
 - 위상 정렬
@@ -444,11 +444,11 @@ public class Main {
 ```
 
 ## 너비 우선 탐색 BFS O(V+E)
-그래프 간선의 가중치가 모두 동일할 때, BFS로 탐색한다.
+그래프 간선의 가중치가 모두 동일할 때, BFS 로 탐색한다.
 너비 우선 탐색은 시작 노드를 기준으로 가까운 노드를 먼저 방문하면서 탐색하는 알고리즘이다.
-선입선출 방식으로 탐색하므로 큐를 이용해 구현하는데, 주로 ArrayDeque를 사용한다. 
-또한 BFS는 탐색 시작 노드와 가까운 노드를 우선하여 탐색하므로 목표 노드에 도착하는 경로가 여러 개일 때, 최단 경로를 보장한다. 
-시간 복잡도는 O(V+E)로 DFS와 같다.
+선입선출 방식으로 탐색하므로 큐를 이용해 구현하는데, 주로 ArrayDeque 를 사용한다. 
+또한 BFS 는 탐색 시작 노드와 가까운 노드를 우선하여 탐색하므로 목표 노드에 도착하는 경로가 여러 개일 때, 최단 경로를 보장한다. 
+시간 복잡도는 O(V+E)로 DFS 와 같다.
 #### 응용 문제
 - 최단 경로 찾기
 - 위상 정렬
@@ -465,10 +465,10 @@ public class Main {
 
       while(!queue.isEmpty()){
          int now = queue.poll();
-         for(int i : adj[now]){
-            if(!visited[i]){
-               visited[i] = true;
-               queue.add(i);
+         for(int next : adj[now]){
+            if(!visited[next]){
+               visited[next] = true;
+               queue.add(next);
             }
          }
       }
@@ -490,7 +490,6 @@ import java.util.Arrays;
 public class BinarySearch {
 
     public static void main(String[] args) {
-//		int[] input = new int[] {4, 6, 11, 19, 21, 50, 77, 81, 99, 100};
         int[] input = new int[] {4, 6, 11, 19, 21, 50, 77, 81, 99, 99, 100};
         Arrays.sort(input);
         binarySearch(input, 99);
@@ -498,7 +497,8 @@ public class BinarySearch {
         // 중복값이 있을 경우 먼저 찾은 값의 인덱스를 반환
         System.out.println("API : " + Arrays.binarySearch(input, 99));
 
-        // 없는 값을 넣으면 그 값이 위치할 곳을 음수로 리턴한다. input의 최소값보다 작은 구간에 있으면 -1
+        // 없는 값을 넣으면 그 값이 위치할 곳을 음수로 리턴한다. 
+        // input 의 최소값보다 작은 구간에 있으면 -1
         System.out.println("API : " + Arrays.binarySearch(input, 102));
     }
 
@@ -507,9 +507,8 @@ public class BinarySearch {
 
         while(low <= high) {
             mid = (low + high)/2; //pivot 잡기
-            printArray(low, mid, high, array); //탐색 과정을 보여주기 위한 method
 
-            // target이 중간값이면 찾은 것!
+            // target 이 중간값이면 찾은 것!
             if(target == array[mid]) {
                 System.out.println(target + "의 index : " + mid);
                 break;
@@ -525,22 +524,13 @@ public class BinarySearch {
             }
         }
     }
-
-    static void printArray(int low, int mid, int high, int[] array) {
-        System.out.print("low = "+ low + " mid = "+ mid + " high = "+ high +" [");
-        for(int i = low; i <= high; i++ ) {
-            if(i == high) System.out.print(array[i]);
-            else System.out.print(array[i]+", ");
-        }
-        System.out.println("]");
-    }
 }
 ```
 
 ## 우선순위 큐 Priority Queue : O(NlogN)
 우선순위 큐는 값이 들어간 순서와 상관없이 우선순위가 높은 데이터가 먼저 나오는 자료구조이다.
-큐 설정에 따라 front에 항상 최댓값 또는 최솟값이 위치한다.
-일반적으로 힙을 이용해 구현하며, Comparable 또는 Comparator를 이용하여 우선순위를 설정한다.
+큐 설정에 따라 front 에 항상 최댓값 또는 최솟값이 위치한다.
+일반적으로 힙을 이용해 구현하며, Comparable 또는 Comparator 를 이용하여 우선순위를 설정한다.
 ```java
 import java.util.Collections;
 import java.util.PriorityQueue;
@@ -575,7 +565,7 @@ public class Main {
             int first_abs = Math.abs(o1);
             int second_abs = Math.abs(o2);
             if (first_abs == second_abs) return o1 > o2 ? 1 : -1; // 절댓값이 같으면 더 작은 수를 먼저(오름차순)
-            else return first_abs - second_abs;
+            return first_abs - second_abs;
         });
         
         // 4. Comparator 클래스를 활용한 우선순위 설정
@@ -620,8 +610,8 @@ public class Prime {
     }
 }
 ```
-이중 for문을 사용하지만 실제 시간 복잡도는 최적화의 정도에 따라 다르겠지만, 일반적으로 `O(Nlog(logN))`이다.
-그 이유는 배수를 삭제하는 연산으로 실제 구현에서 바깥쪽 for문을 생략하는 경우가 빈번하게 발생하기 때문이다.
+이중 for 문을 사용하지만 실제 시간 복잡도는 최적화의 정도에 따라 다르겠지만, 일반적으로 `O(Nlog(logN))`이다.
+그 이유는 배수를 삭제하는 연산으로 실제 구현에서 바깥쪽 for 문을 생략하는 경우가 빈번하게 발생하기 때문이다.
 
 ## 팰린드롬 수
 79,179와 324,423 처럼 어떤 수와 그 수의 숫자 순서를 뒤집은 수가 일치하는 수를 팰린드롬이라고 부른다.
@@ -716,7 +706,7 @@ static int gcd(int a, int b){
 2. a, b로 유클리드 호제법을 반복하면서 몫, 나머지를 저장한다. 나머지가 0이 되면 반복을 중단한다.
 3. 반복으로 구한 나머지와 몫을 이용하여 거꾸로 올라가며 x=y', y=x'-y'*q를 계산한다.
 이때 x'는 이전 x, y'는 이전 y를 의미하고, q는 현재 보고 있는 몫을 의미한다.
-4. 이렇게 재귀 방식으로 알아낸 최종 x, y는 ax+by=gcd(a,b)를 만족하므로 mok를 곱해서 최종 Kx, Ky를 간단히 구할 수 있다.
+4. 이렇게 재귀 방식으로 알아낸 최종 x, y는 ax+by=gcd(a,b)를 만족하므로 mok 를 곱해서 최종 Kx, Ky를 간단히 구할 수 있다.
 ```java
 public class EEA {
     public static void main(String[] args) {
@@ -729,12 +719,12 @@ public class EEA {
         if(C % gcd != 0) System.out.println(-1);
         else {
             int mok = C /gcd;
-            long[] ret = Excute(A, B);
+            long[] ret = Euclidean(A, B);
             System.out.println(ret[0]*mok + " " + ret[1]*mok);
         }
     }
 
-    public static long[] Excute(long a, long b){ // 유클리드 호제법
+    public static long[] Euclidean(long a, long b){ // 유클리드 호제법
         long[] ret = new long[2];
         if(b==0) {
             ret[0] = 1; 
@@ -743,7 +733,7 @@ public class EEA {
         }
 
         long q = a/b;
-        long[] v = Excute(b, a%b); // 재귀 형태로 유클리드 호제법 수행
+        long[] v = Euclidean(b, a%b); // 재귀 형태로 유클리드 호제법 수행
         ret[0] = v[1]; // 역순으로 올라오면서 x, y값을 계산하는 로직
         ret[1] = v[0]-v[1]*q;
         return ret;
@@ -807,6 +797,7 @@ public class Combination {
 #### 에지 리스트
 에지를 중심으로 그래프를 표현한다. 배열에 출발 노드와 도착 노드를 저장하면 에지를 표현할 수 있다.\
 노드가 N개일 때, 가중치가 없는 그래프의 경우 `A[N][2]`(S, E)로 표현할 수 있고, 가중치가 있을 경우 `A[N][3]`(S, E, V)으로 표현할 수 있다.\
+또는 Edge 클래스를 선언하고, Edge[]로 사용하거나, ArrayList<Edge> 로 사용할 수 있다.
 에지 리스트는 구현은 쉽지만 특정 노드와 관련되어 있는 에지를 탐색하기는 어렵다. 
 그래서 에지 리스트는 벨만 포드나 크루스칼 알고리즘에 사용되며, 노드 중심 알고리즘에는 사용하지 않는다.
 
@@ -817,8 +808,8 @@ public class Combination {
 또한 노드 개수가 많으면 아예 2차원 배열을 선언할 수 없다. 특히 노드가 3만 개가 넘으면 자바 힙 스페이스 에러가 발생한다.
 
 #### 인접 리스트
-인접 리스트는 ArrayList로 그래프를 표현한다. 즉, 노드의 개수만큼 ArrayList를 선언한다.\
-예를 들어 Integer형인 N개의 노드는 `ArrayList<Integer>[N]`으로 선언할 수 있다.
+인접 리스트는 ArrayList 로 그래프를 표현한다. 즉, 노드의 개수만큼 ArrayList 를 선언한다.\
+예를 들어 Integer 형인 N개의 노드는 `ArrayList<Integer>[N]`으로 선언할 수 있다.
 가중치가 있는 그래프의 경우 Node 클래스를 자료형으로 사용하여 `ArrayList<Node>[N]`으로 선언한다.\
 인접 리스트 방식은 구현이 복잡하지만, 노드와 연결되어 있는 에지를 탐색하는 시간이 매우 뛰어나며, 
 노드 개수가 커도 공간 효율이 좋아 메모리 초과 에러도 발생하지 않는다.
@@ -877,17 +868,17 @@ public class UnionFind {
     }
 
     public static int Find(int a){
-        if(parent[a] == a) return a; // index와 value가 같으면 리턴
+        if(parent[a] == a) return a; // index 와 value 가 같으면 리턴
         return parent[a] = Find(parent[a]); // 재귀 함수에서 탐색한 모든 노드의 대표 노드값을 이번 연산에서 발견한 대표 노드로 업데이트(중요)
     }
 }
 ```
-### 그래프 내 사이클을 판별 = MST에서 활용
+### 그래프 내 사이클을 판별 = MST 에서 활용
 이러한 유니온 파인드 연산으로 그래프의 사이클을 판별할 수 있다.
 union 연산은 그래프에서의 간선으로 표현될 수 있다. 따라서 간선을 하나씩 확인하면서 두 노드가 포함되어 있는 집합을 합치는 과정을 반복하는 것만으로도 그래프 내 '사이클'을 판별할 수 있다.
 1. 각 간선을 확인하며 두 노드의 대표 노드를 확인함
-2. 만약 서로의 parent가 다르면 두 노드에 대해 union 연산을 수행함
-3. 만약 parent가 같다면 사이클이 발생한 것임!
+2. 만약 서로의 parent 가 다르면 두 노드에 대해 union 연산을 수행함
+3. 만약 parent 가 같다면 사이클이 발생한 것임!
 4. 그래프에 포함되어 있는 모든 간선에 대해 위의 과정을 반복함
 
 ### 변형된 유니온 파인드 : 집합의 개수와, 원소의 개수를 카운트
@@ -967,7 +958,7 @@ public class TopologySort {
     static int[] result; //DP
     public static void main(String[] args){
         int n, m; // input
-        graph = new ArrayList[n+1];
+        graph = new ArrayList<>[n+1];
         for(int i = 1; i <= n; i++){
             graph[i] = new ArrayList<>();
         }
@@ -1005,16 +996,16 @@ public class TopologySort {
 ```
 단순한 정렬 문제 보다는, 임계 경로를 찾는 것처럼 최대 경로 값을 구하는 문제에 이용된다. 
 예를 들어, 위상 정렬을 수행하면 출발 도시에서 도착 도시까지 거치는 모든 도시와 관련된 임계 경로값을 구할 수 있다. 
-특히, 1분도 쉬지 않고 달려야 하는 도로의 수를 구할 때는 에지 뒤집기 아이디어를 사용하여 도착 도시에서부터 출발하는 reverseGraph를 그려서 해결할 수 있다. 
+특히, 1분도 쉬지 않고 달려야 하는 도로의 수를 구할 때는 에지 뒤집기 아이디어를 사용하여 도착 도시에서부터 출발하는 reverseGraph 를 그려서 해결할 수 있다. 
 visited 배열을 사용하여 중복 카운트를 방지한다. (1516_게임개발, 1948_임계경로)
 
-## 다익스트라 O(ElogV)
+## 다익스트라 O(E logV)
 출발 노드에서 다른 모든 노드로 가는 최단 거리를 구하는 알고리즘이다.
 단, 음수 간선이 존재하면 풀 수 없다.
 
 ```text
 BFS 알고리즘을 기본으로 탐색하며 DP로 최단 경로를 업데이트한다.
-PriorityQueue를 이용해 가장 적은 비용의 노드부터 탐색한다.
+PriorityQueue 를 이용해 가장 적은 비용의 노드부터 탐색한다.
 시작노드부터 큐에 넣어 BFS 탐색을 하며, 새로운 최단 경로가 발생했을 때만 해당 노드를 큐에 추가한다.
 한번 방문한 노드는 새로운 최단 경로가 될 수 없다.
 - DP 배열 무한대로 초기화
@@ -1024,14 +1015,14 @@ PriorityQueue를 이용해 가장 적은 비용의 노드부터 탐색한다.
 ```
 
 1. 인접 리스트로 그래프 구현하고, 최단 거리 배열을 초기화함
-   1. 인접 리스트에 연결한 배열의 자료형은 보통 (노드, 가중치) 형태로 선언함
-   2. 최단 거리 배열은 출발 노드는 0, 이외의 노드는 무한으로 초기화함
-3. 값이 가장 작은 노드를 선택하여 최단 거리 배열을 업데이트함
-   1. 선택된 노드에 연결된 에지의 값을 바탕으로 다른 노드의 값을 업데이트함
-   2. 최단 거리 = Min(선택 노드의 최단 거리 배열의 값 + 에지 가중치, 연결 노드의 최단 거리 배열의 값)
-   3. 최단 거리 배열이 업데이트될 때, 큐에 해당 노드를 추가함(최단경로로 탐색)
-4. 모든 노드가 처리될 때까지 위의 과정을 반복함
-   1. 재방문하지 않기 위해 visited[] 배열을 만들어 처리함
+   - 인접 리스트에 연결한 배열의 자료형은 보통 (노드, 가중치) 형태로 선언함
+   - 최단 거리 배열은 출발 노드는 0, 이외의 노드는 무한으로 초기화함
+2. 값이 가장 작은 노드를 선택하여 최단 거리 배열을 업데이트함
+   - 선택된 노드에 연결된 에지의 값을 바탕으로 다른 노드의 값을 업데이트함
+   - 최단 거리 = Min(선택 노드의 최단 거리 배열의 값 + 에지 가중치, 연결 노드의 최단 거리 배열의 값)
+   - 최단 거리 배열이 업데이트될 때, 큐에 해당 노드를 추가함(최단경로로 탐색)
+3. 모든 노드가 처리될 때까지 위의 과정을 반복함
+   - 재방문하지 않기 위해 visited[] 배열을 만들어 처리함
 
 대부분 다익스트라 알고리즘이 출발 노드와 도착 노드 간의 최단 거리를 구하는 알고리즘이라고 생각하지만,
 실제로 완성된 배열은 출발 노드와 이외의 모든 노드 간의 최단 거리를 표현하고 있다.
@@ -1109,7 +1100,7 @@ public class Dijkstra {
 
 ```text
 벨만 포드 알고리즘은 DP를 N-1번 업데이트한다는 아이디어가 중요하다.
-그리고 N-1번의 for문 동안 모든 에지에 대해 최단 경로 값을 업데이트한다.
+그리고 N-1번의 for 문 동안 모든 에지에 대해 최단 경로 값을 업데이트한다.
 에지리스트로 그래프를 저장한다. 모든 에지에 대해 탐색해야 하기 때문에 에지 간 순서는 중요하지 않다.
 그래프 내에서 방문한 노드는 DP의 초기값(무한대)으로 확인한다.
 N번 째에 업데이트가 발생하다면 음수 싸이클이 존재한다.
@@ -1119,7 +1110,7 @@ N번 째에 업데이트가 발생하다면 음수 싸이클이 존재한다.
    1. edge 클래스는 일반적으로 출발 노드, 도착 노드와 가중치 변수로 구성됨 
    2. 최단 경로 배열은 출발 노드는 0, 나머지 노드는 무한대로 초기화함(기본구조)
    3. 하지만 초기값은 문제의 조건에 따라 달라질 수 있음!
-2. 모든 에지를 확인해 총 N-1번 DP 배열을 업데이트함(for문으로!!) 
+2. 모든 에지를 확인해 총 N-1번 DP 배열을 업데이트함(for 문으로!!) 
    1. 최단 거리 배열에서 업데이트 반복 횟수는 `노드 개수-1`이다! <- `N-1개의 usedEdge를 찾는 MST와 구별`
       - 노드의 개수가 N이고, 음수 사이클이 없을 때 특정 두 노드의 최단 거리를 구성할 수 있는 에지의 최대 개수는 N-1개이기 때문임
    2. `DP[s] != 무한대`이며 `DP[e] > DP[s] + w` 일 때 `DP[e] = DP[s] + w`로 배열의 값을 업데이트함
@@ -1169,6 +1160,8 @@ public class BellmanFord {
                 }
             }
         }
+        
+        if(checked) System.out.println("Cycle!");
     }
 }
 ```
@@ -1191,7 +1184,7 @@ public class BellmanFord {
 - 즉, 점화식은 `D[S][E] = Math.min(D[S][E], D[S][K]+D[K][E]`이다.
 
 1. 인접 행렬로 최단 거리 배열 `D[S][E]`를 선언하고 초기화함
-   1. `D[S][E]`는 노드 S에서 노드 E까지의 최단 거리를 저장하는 배열임
+   1. `D[S][E]`는 노드 S에서 노드 E 까지의 최단 거리를 저장하는 배열임
    2. S와 E의 값이 같은 칸은 0, 다른 칸은 무한으로 초기화함 (자기 자신에게 가는 최단 거리는 0이기 때문)
 2. 최단 거리 배열에 그래프 데이터를 저장함
    1. 플로이드-워셜 알고리즘은 사용하는 정점 V의 개수가 적기 때문에 인접 행렬로 그래프를 표현함
@@ -1249,7 +1242,7 @@ S, E, K라는 변수로 그래프의 경로를 나누어 생각하는 점화식�
 
 크루스칼 알고리즘과 프림 알고리즘으로 구현할 수 있다.
 
-### 크루스칼 O(ElogV)
+### 크루스칼 O(E logV)
 가중치가 가장 작은 에지부터 먼저 연결해서 최소 신장 트리를 구성한다. 이 때 유니온 파인드 기법으로 사이클 여부를 검사한다.
 
 1. 우선순위 큐 에지 리스트로 그래프를 구현하고 유니온 파인드 배열을 초기화함
@@ -1319,7 +1312,7 @@ public class MST {
 ## 코딩 테스트에서 트리 문제 유형
 1. 그래프로 푸는 트리
    1. 노드와 에지를 그래프처럼 인접 리스트로 표현할 수 있음
-   2. 그래서 DFS와 BFS를 적용하여 트리 문제를 해결할 수 있음
+   2. 그래서 DFS 와 BFS 를 적용하여 트리 문제를 해결할 수 있음
 2. 트리만을 위한 문제
    1. 이진 트리, 세그먼트 트리, LCA 처럼 1차원 배열로 트리를 표현할 수 있음
    2. 즉, 드라마틱하게 데이터를 관리함
@@ -1375,7 +1368,7 @@ public class Trie {
             tNode now = root;
             for(int j = 0; j < text.length(); j++) {
                 char c = text.charAt(j);
-                // 26개 알파벳의 위치를 배열 index로 나타내기 위해 (c - 'a')를 수행함
+                // 26개 알파벳의 위치를 배열 index 로 나타내기 위해 (c - 'a')를 수행함
                 if(now.next[c - 'a'] == null) { // 현재 문자가 공백상태라면 노드를 추가해줌
                     now.next[c - 'a'] = new tNode();
                 }
@@ -1408,7 +1401,7 @@ public class Trie {
 }
 ```
 
-## 인덱스 트리 O(MlogN)
+## 인덱스 트리 O(M logN)
 주어진 데이터들의 구간 합과 데이터 업데이트를 빠르게 수행하기 위해 고안해낸 자료구조이다.
 보통 구간 합은 '합 배열'을 이용하여 구할 수 있는데, 인덱스 트리와의 차이점은 데이터의 업데이트가 어렵다는 것이다.
 인덱스 트리는 특유의 자료구조를 가지고 데이터의 업데이트를 손쉽게 수행하며 구간의 질의값을 구할 수 있다.
@@ -1426,7 +1419,7 @@ public class Trie {
 3. 인덱스 2^K를 리프 포인터를 설정해서 리프 노드의 위치를 저장하고 업데이트에 사용한다.
 4. 리프 노드를 제외한 나머지 노드의 값을 채운다.
    1. 2^K-1부터 1번 쪽으로 채우게 된다.
-   2. 채워야 하는 인덱스가 N이라고 가정하면 자신의 자식 노드를 이용해 해당 값을 채울 수 있다.
+   2. 채워야 하는 인덱스가 N 이라고 가정하면 자신의 자식 노드를 이용해 해당 값을 채울 수 있다.
    3. 자식 노드의 인덱스는 이진 트리 형식이기 때문에 2N, 2N+1이 된다.
    4. 구간 합 예 : `A[N] = A[2N] + A[2N+1]`
    5. 최대 예 : `A[N] = Math.max(A[2N], A[2N+1])`
@@ -1435,10 +1428,10 @@ public class Trie {
 1. 주어진 질의 인덱스를 인덱스 트리의 리프 노드에 해당하는 인덱스로 변경한다.
    1. `인덱스 트리 index = 주어진 질의 index + 2^K - 1`
 2. 질의에 해당하는 노드를 선택한다.
-   1. left % 2 == 1일 때 해당 노드를 선택한다. // 완전 이진 트리에서 left child는 항상 짝수임
-   2. right % 2 == 0일 때 해당 노드를 선택한다. // 완전 이진 트리에서 right child는 항상 홀수임
-   3. left의 depth를 변경한다. -> left = (left + 1) / 2 연산을 실행
-   4. right의 depth를 변경한다. -> right = (right - 1) / 2 연산을 실행
+   1. left % 2 == 1일 때 해당 노드를 선택한다. // 완전 이진 트리에서 left child 는 항상 짝수임
+   2. right % 2 == 0일 때 해당 노드를 선택한다. // 완전 이진 트리에서 right child 는 항상 홀수임
+   3. left 의 depth 를 변경한다. -> left = (left + 1) / 2 연산을 실행
+   4. right 의 depth 를 변경한다. -> right = (right - 1) / 2 연산을 실행
    5. right < left 될 때까지 과정 1~4를 반복한다.
 3. 선택된 노드를 가지고 질의값을 구한다.
    1. 구간 합 : 선택된 노드를 모두 더함
@@ -1463,7 +1456,7 @@ public class IndexTree {
         }
         
         initTree();
-        query(2, 7);
+        int q = query(2, 7);
         update(3, 5);
     }
     
@@ -1496,7 +1489,7 @@ public class IndexTree {
     }
 
     static long query(int left, int right){
-        // left, right 포인터를 인덱스 트리의 leafNode에 해당하는 인덱스로 바꿔준다.
+        // left, right 포인터를 인덱스 트리의 leafNode 에 해당하는 인덱스로 바꿔준다.
         // 인덱스 트리 index = 주어진 질의 index + 2^K - 1
         left += leafPointer - 1;
         right += leafPointer - 1;
@@ -1504,12 +1497,12 @@ public class IndexTree {
         long result = 0L;
         // left, right 포인터가 교차될 때까지
         while(left <= right){
-            // left 포인터가 right child면 현재 값을 result에 더하고 left포인터를 오른쪽으로 하나 당긴다.
+            // left 포인터가 right child 면 현재 값을 result 에 더하고 left 포인터를 오른쪽으로 하나 당긴다.
             if(left % 2 == 1){
                 result += tree[left];
                 left++;
             }
-            // right 포인터가 left child면 현재 값을 result에 더하고 right포인터를 왼쪽으로 하나 당긴다.
+            // right 포인터가 left child 면 현재 값을 result 에 더하고 right 포인터를 왼쪽으로 하나 당긴다.
             if(right % 2 == 0){
                 result += tree[right];
                 right--;
@@ -1523,7 +1516,7 @@ public class IndexTree {
     }
 
     static void update(int index, long value){
-        // index로 들어온 값을 tree 배열에서 찾을 수 있는 leafNode 인덱스로 바꿔준다.
+        // index 로 들어온 값을 tree 배열에서 찾을 수 있는 leafNode 인덱스로 바꿔준다.
         int treeIndex = leafPointer + index - 1 ;
 
         // 리프노드의 값을 바꾸고
@@ -1570,7 +1563,7 @@ public class LCA1 {
       visited = new boolean[n+1];
 
       BFS(1);
-      LCA(a, b);
+      int ans = LCA(a, b);
    }
 
    static int LCA(int a, int b){
@@ -1671,7 +1664,7 @@ public class LCA2 {
         }
 
         parent = new int[kMax+1][N+1];
-        BFS(1); // parent와 depth 배열 초기화
+        BFS(1); // parent 와 depth 배열 초기화
         // 점화식으로 k번째 부모 노드의 값 채우기
         for(int k = 1; k <= kMax; k++) {
             for(int n = 1; n <= N; n++) {
@@ -1679,7 +1672,7 @@ public class LCA2 {
             }
         }
 
-        LCA(a,b);
+        int ans = LCA(a,b);
     }
 
     static int LCA(int a, int b) {
@@ -1696,7 +1689,7 @@ public class LCA2 {
             }
         }
 
-        //depth를 맞췄는데 조상이 같으면 바로 종료
+        //depth 를 맞췄는데 조상이 같으면 바로 종료
         if(a==b) return a;
 
         // 2. LCA 찾기 : 2^K승 점프를 하면서 공통부모 바로 아래까지 올리기
@@ -1735,8 +1728,8 @@ public class LCA2 {
 # 기하
 ## CCW(Counter-ClockWise)
 코딩 테스트에서의 기하 알고리즘은 모두 CCW(counter-clockwise)라는 기하학적 성질을 이용해 출 수 있다.
-CCW는 평면상의 3개의 점과 관련된 점들의 위치 관계를 판단하는 알고리즘이다.
-세 점을 `A(X1, Y1), B(X2, Y2), C(X3, Y3)`라고 가정했을 때 CCW의 공식은 다음과 같다.
+CCW 는 평면상의 3개의 점과 관련된 점들의 위치 관계를 판단하는 알고리즘이다.
+세 점을 `A(X1, Y1), B(X2, Y2), C(X3, Y3)`라고 가정했을 때 CCW 의 공식은 다음과 같다.
 
 - `CCW = (X1Y2 + X2Y3 + X3Y1) - (X2Y1 + X3Y2 + X1Y3)`
 - `|CCW결괏값| / 2 = 세 점으로 이뤄진 삼각형의 넓이`
@@ -1751,13 +1744,13 @@ Y1 Y2 Y3 Y1     Y1 Y2 Y3 Y1
 ```
 
 이렇게 세 점이 주어졌을 때 CCW 공식을 사요해 세 점에 관한 다양한 관계를 도출할 수 있다.
-CCW는 부호에 따라 다음과 같은 3가지 의미가 있다.
+CCW 는 부호에 따라 다음과 같은 3가지 의미가 있다.
 - CCW 결과 < 0 : 세 점이 시계 방향으로 배치됨
 - CCW 결과 == 0 : 세 점이 일직선으로 배치됨
 - CCW 결과 > 0 : 세 점이 반시계 방향으로 배치됨
 그리고 부호와는 별개로 CCW 결과의 절댓값은 세 점의 벡터의 외적값을 나타내고,
-CCW의 절댓값을 절반으로 나누면 세 점으로 이뤄진 삼각형의 넓이를 나타낸다.
-또한, 보통 CCW를 계산하는 과정에서 곱셈으로 인해 오버플로우가 발생할 수 있다. 그래서 long 형으로 선언해야 한다.
+CCW 의 절댓값을 절반으로 나누면 세 점으로 이뤄진 삼각형의 넓이를 나타낸다.
+또한, 보통 CCW 를 계산하는 과정에서 곱셈으로 인해 오버플로우가 발생할 수 있다. 그래서 long 형으로 선언해야 한다.
 
 ```java
 public class CCW {
@@ -1767,7 +1760,7 @@ public class CCW {
         
         if(ccw < 0) System.out.println("시계방향");
         else if(ccw == 0) System.out.println("일직선");
-        else if(ccw > 0) System.out.println("반시계방향");
+        else System.out.println("반시계방향");
     }
 }
 ```
@@ -1782,7 +1775,7 @@ C   |    or   |   C
 
 ### 선분 AB와 CD의 교차 여부를 구하시오.
 ```java
-public class CCW { // 선분의 교차여부
+public class 기하 { // 선분의 교차여부
     public static void main(String[] args) {
         // A(x1, y1), B(x2, y2), C(x3, y3), D(x4, y4)
         int ABC = CCW(x1, y1, x2, y2, x3, y3);
@@ -1796,6 +1789,8 @@ public class CCW { // 선분의 교차여부
         } else if(ABC*ABD <= 0 && CDA*CDB <= 0) { // 두 선분이 만남
             cross = true;
         }
+        
+        if(cross) System.out.println("교차함");
 
     }
 
@@ -1807,11 +1802,8 @@ public class CCW { // 선분의 교차여부
     }
 
     public static boolean isOverlap(long x1, long y1, long x2, long y2, long x3, long y3, long x4, long y4) {
-        if(Math.min(x1, x2) <= Math.max(x3, x4) && Math.min(x3, x4) <= Math.max(x1, x2)
-        &&  Math.min(y1, y2) <= Math.max(y3, y4) && Math.min(y3,y4) <= Math.max(y1, y2)){
-            return true;
-        }
-        return false;
+        return Math.min(x1, x2) <= Math.max(x3, x4) && Math.min(x3, x4) <= Math.max(x1, x2)
+                && Math.min(y1, y2) <= Math.max(y3, y4) && Math.min(y3, y4) <= Math.max(y1, y2);
     }
 }
 ```
@@ -1831,7 +1823,7 @@ CCW = (X1Y2 + X2Y3 + X3Y1) - (X2Y1 + X3Y2 + X1Y3)
 # DP
 ## LCS (Longest Common Subsequence)
 최장 공통 부분 수열 찾기 문제는 문자열을 이용한 대표적인 동적 계획법 문제이다.
-예를 들어, ACAYKP와 CAPCAK의 LCS는 ACAK가 된다.
+예를 들어, `ACAYKP` 와 `CAPCAK` 의 LCS 는 `ACAK` 가 된다.
 이러한 종류의 문제는 각 문자열을 축으로 하는 2차원 DP 배열을 생성하여 해결할 수 있다.
 DP 배열에 저장하는 값은 각 위치 인덱스를 마지막 문자로 하는 두 문자열의 최장 공통 수열의 길이이다.
 
@@ -1860,9 +1852,9 @@ LCS 점화식은 다음과 같다.
 ```java
 public class LCS {
     static long[][] DP;
-    static ArrayList<Character> Path; // LCS를 저장할 리스트
+    static ArrayList<Character> Path; // LCS 를 저장할 리스트
     static char[] A, B; // 주어진 문자열 배열
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         A = br.readLine().toCharArray();
         B = br.readLine().toCharArray();
@@ -1888,7 +1880,7 @@ public class LCS {
 
     static void getText(int row, int column) {
         if(row == 0 | column == 0) return; // 재귀함수 방식의 구현
-        if(A[row-1] == B[column-1]) { // 문자가 같으면 Path에 기록하고, 왼쪽 대각선으로 이동
+        if(A[row-1] == B[column-1]) { // 문자가 같으면 Path 에 기록하고, 왼쪽 대각선으로 이동
             Path.add(A[row-1]);
             getText(row-1, column-1);
         } else { // 문자가 다르면 왼쪽 값과 위의 값 중 큰 값으로 이동
@@ -1903,7 +1895,7 @@ public class LCS {
 ```
 
 ## TSP (Traveling Salesman Problem)
-외판원 순회 문제는 영어로 TSP라고 불리며 컴퓨터 과학 분야에서 가장 중요하게 취급되는 문제 중 하나이다.
+외판원 순회 문제는 영어로 TSP 라고 불리며 컴퓨터 과학 분야에서 가장 중요하게 취급되는 문제 중 하나이다.
 다양한 응용 문제가 있지만, 가장 일반적인 형태의 문제는 다음과 같다.
 
 - 점화식 `D[c][v]` : 현재 도시가 c, 현재까지 방문한 모든 도시 리스트가 v일 때 앞으로 남은 모든 도시를 경유하는 데 필요한 최소 비용
@@ -1934,7 +1926,7 @@ public class Main_2098_외판원의순회경로 {
     static int[][] W, d;
     static int N;
     static final int INF = 1000000 * 16 +1; // Integer.MAX_VALUE 를 할 경우 에러가 발생
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine().trim());
         W = new int[16][16];
