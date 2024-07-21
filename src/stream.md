@@ -37,7 +37,7 @@ public class Main {
         int a = Integer.parseInt(st.nextToken());
         int b = Integer.parseInt(st.nextToken());
         
-        bw.write(a+b);
+        bw.write(a+b); // string만 입력가능!
         bw.newLine();
 
         bw.flush();
@@ -68,8 +68,9 @@ public class Main {
 import java.io.FileInputStream;
 
 public class Main {
-    public static void main(String[] args) {
-        System.setIn(new FileInputStream("Input.txt"));
+    public static void main(String[] args) throws FileNotFoundException {
+        System.setIn(new FileInputStream("input.txt"));
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     }
 }
 ```
